@@ -3,11 +3,17 @@
 from DecisionTree import *
 from config import *
 
-class Trainer:
-    def __init__(self):
-        print ("Decision Tree Trainer is created.")
 
-    def learnModel(self, emotion, data):
-        print ("Training model of " + emotion + " " + str(labelToNo(emotion)))
-        dt = DecisionTree(emotion)
-        return dt
+def learn(emotion, dataset, attributes):
+    dt = DecisionTree("happiness")
+    return dt
+
+def learnModel(emotion, dataset):
+    samples = dataset[0]
+    labels = dataset[1]
+    
+    label = labelToNo(emotion)
+    attributes = list(range(0, 44))
+    
+    dt = learn(label, dataset, attributes)
+    return dt
