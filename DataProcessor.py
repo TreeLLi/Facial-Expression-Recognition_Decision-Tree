@@ -8,7 +8,7 @@ def readDataFromMat(file_name):
 
 # Split and divide
 
-def crossValidation(dataset, folds):
+def crossValidation(dataset, fold, fold_num):
     # return (train_list, test_list)
     # train_list is [[x-samples:N*45], [y-labels:1*N]]
     return ([[1, 2, 3], [2, 3, 4]], [[5, 6, 7], [8, 9, 10]])

@@ -23,50 +23,53 @@ if __name__ == '__main__':
         dt.export()
     
     for dataset in [clean_dataset, noisy_dataset]:
-        # split dataset based on the 10-folds cross validation method
-        train_datasets, test_datasets = crossValidation(dataset, CROSS_VALIDATION_FOLDS)
-        # learn the models for each emotion for each fold, i.e. 6*10 classifiers
         dts_matrix = []
-        for train_dataset in train_datasets:
+        pdts_matrix = []
+        labels_matrix = []
+        # split dataset based on the 10-folds cross validation method
+        for fold in range(CROSS_VALIDATION_FOLDS):
+            train_dataset, test_dataset = crossValidation(dataset, fold, CROSS_VALIDATION_FOLDS)
+
+            # learn the models for each emotion for each fold, i.e. 6*10 classifiers
             dts_row = []
             for emotion in emotions:
                 dt = learnModel(emotion, train_dataset)
                 dts_row.append(dt)
             dts_matrix.append(dts_row)
 
-        # predict the emotions for samples of test dataset
-        pdts_matrix = []
-        labels = []
-        for idx, test_dataset in enumerate(test_datasets):
-            dts_row = dts_matrix[idx]
+            # predict the emotions for samples of test dataset
             pdts_row = []
             for dt in dts_row:
                 predictions = dt.predict(test_dataset)
                 pdts_row.append(predictions)
             pdts_matrix.append(pdts_row)
-            labels.append(test_dataset[1])
-
+            labels_matrix.append(test_dataset[1])
+            
         # evaluate the results of predictions
-        cf_matrix, recalls, precisions, f1s, classifications = evaluate(labels, pdts_matrix)
+        cf_matrix, recalls, precisions, f1s, classifications = evaluate(labels_matrix, pdts_matrix)
         if dataset is clean_dataset:
             print ("The evaluation for the clean dataset:\n")
         else:
             print ("The evaluation for the noisy dataset:\n")
+            
+            print ("Confusion Matrix: ")
+            print (cf_matrix)
+            
+            print ("Recall rates: ")
+            print (recalls)
 
-        print ("Confusion Matrix: ")
-        print (cf_matrix)
+            print ("Precision rates: ")
+            print (precisions)
 
-        print ("Recall rates: ")
-        print (recalls)
+            print ("F1 measurements: ")
+            print (f1s)
+                
+            print ("Classification rates: ")
+            print (classifications)
+        
 
-        print ("Precision rates: ")
-        print (precisions)
-
-        print ("F1 measurements: ")
-        print (f1s)
-
-        print ("Classification rates: ")
-        print (classifications)
+        
+        
 
         
         

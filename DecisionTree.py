@@ -2,7 +2,6 @@
 class DecisionTree:
     def __init__(self, emotion):
         self.emotion = emotion
-        print ("DecisionTree " + self.emotion)
 
 # Accessing
 
