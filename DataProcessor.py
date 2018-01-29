@@ -1,5 +1,9 @@
 # Data Processor works for loading and preprocessing, format and split etc.
 
+import scipy.io
+import numpy as np
+import math, copy
+
 # Load data
         
 def readDataFromMat(file_name):
@@ -8,10 +12,9 @@ def readDataFromMat(file_name):
     cleanDataY = scipy.io.loadmat(file_name)['y']
     num_of_rows = len(cleanDataY)
     #print(num_of_rows)
-    newcleandataY = np.zeros((num_of_rows,6),int)
+    newcleandataY = np.zeros((num_of_rows,1),int)
     for row in range(newcleandataY.shape[0]):
-        col  = cleanDataY[row]-1
-        newcleandataY[row][col] = 1
+        newcleandataY[row] = cleanDataY[row][0]
     return (cleanDataX, newcleandataY)
 # Split and divide
 
