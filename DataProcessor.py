@@ -2,8 +2,8 @@
 
 import scipy.io
 import numpy as np
-import math, copy
-
+import math
+import copy
 # Load data
         
 def readDataFromMat(file_name):
