@@ -1,5 +1,8 @@
 # Data Processor works for loading and preprocessing, format and split etc.
-
+import scipy.io
+import numpy as np
+import math
+import copy
 # Load data
         
 def readDataFromMat(file_name):
