@@ -29,7 +29,6 @@ if __name__ == '__main__':
         # split dataset based on the 10-folds cross validation method
         for fold in range(CROSS_VALIDATION_FOLDS):
             train_dataset, test_dataset = crossValidation(dataset, fold, CROSS_VALIDATION_FOLDS)
-
             # learn the models for each emotion for each fold, i.e. 6*10 classifiers
             dts_row = []
             for emotion in emotions:

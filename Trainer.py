@@ -44,6 +44,7 @@ def selectBestAttr(samples, labels, emotion, attributes):
         for idx, sample in enumerate(samples):
             attr_value = sample[attribute]
             label = labels[idx]
+            #print (label)
             p += 1 if label==emotion else 0
             n += 1 if label!=emotion else 0
             p0 += 1 if (label==emotion and attr_value==0) else 0
@@ -52,7 +53,6 @@ def selectBestAttr(samples, labels, emotion, attributes):
             n1 += 1 if (label!=emotion and attr_value==1) else 0
         ig = entropy(p, n) - remainder(p, n, p0, p1, n0, n1)
         igs.append(ig)
-    print (igs)
     
 def learn(dt, dataset, attributes):
     samples = dataset[0]
@@ -60,8 +60,6 @@ def learn(dt, dataset, attributes):
     #emotion = dt.emotion
     emotion = 1
 
-    print (dataset)
-    print (samples)
     if isSameValues(labels):
         # all samples share the same emotion
         leaf_value = True if emotion==labels[0] else False
@@ -77,6 +75,9 @@ def learn(dt, dataset, attributes):
 def learnModel(emotion, dataset):
     dt = DecisionTree(emotion)
     attributes = list(range(0, 44))
+
+    # print (dataset[0][0])
+    # print (dataset[1][0])
     
     learn(dt, dataset, attributes)
     return dt
