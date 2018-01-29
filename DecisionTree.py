@@ -1,33 +1,58 @@
 # Decision tree model class used to represent the structure of trained Decision Tree model, visualise and predict the emotion of given sample
+from config import *
+
 class DecisionTree:
-    def __init__(self, emotion):
+    def __init__(self, emotion, attribute = -1):
+        self.attribute = attribute
         self.emotion = emotion
+        self.tree = {1: None, 0: None}
 
 # Accessing
 
     def op(self):
-        return "the attribute number"
+        return self.attribute
 
     def kids(self):
-        return []
+
+        self.kids = []
+        for key in self.tree.keys():
+            if isinstance(self.tree[key], DecisionTree):
+                self.kids.append(self.tree[key].op())
+        return self.kids
+
 
     def classification(self):
         # substitue the name 'class' referred in the manual
-        return 1
-        
+        self.labels = []
+        for key in self.tree.keys():
+            if not isinstance(self.tree[key], DecisionTree):
+                self.labels.append(self.tree[key])
+        return self.labels
+
+    def emotion(self):
+        return labelToNo(self.emotion)
+
+
 # Setting
 
-    def newLeaf(self, value):
+    def newLeaf(self, key, value):
+        self.tree[key] = value
         return value
 
-    def newNode(self, attr):
-        sub_dt = DecisionTree(self.emotion)
-        return sub_dt
+    def newNode(self, key, attr):
+        self.sub_dt = DecisionTree(self.emotion, attr)
+        self.tree[key] = self.sub_dt
+        return self.sub_dt
+
+    def setAttribute(self, attr):
+        self.attr = attr
+
 
 # Visualisation and Export
-        
+
     def visualise(self):
         print ("visualise tree " + self.emotion)
+
 
     def export(self):
         print ("export tree " + self.emotion)
