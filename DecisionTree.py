@@ -2,9 +2,10 @@
 from config import *
 
 class DecisionTree:
+
     def __init__(self, emotion, attribute = -1):
         self.attribute = attribute
-        self.emotion = emotion
+        self.__emotion = emotion
         self.tree = {1: None, 0: None}
 
 # Accessing
@@ -30,7 +31,7 @@ class DecisionTree:
         return self.labels
 
     def emotion(self):
-        return labelToNo(self.emotion)
+        return labelToNo(self.__emotion)
 
 
 # Setting
@@ -40,7 +41,7 @@ class DecisionTree:
         return value
 
     def newNode(self, key, attr):
-        self.sub_dt = DecisionTree(self.emotion, attr)
+        self.sub_dt = DecisionTree(self.__emotion, attr)
         self.tree[key] = self.sub_dt
         return self.sub_dt
 
@@ -51,11 +52,11 @@ class DecisionTree:
 # Visualisation and Export
 
     def visualise(self):
-        print ("visualise tree " + self.emotion)
+        print ("visualise tree " + self.__emotion)
 
 
     def export(self):
-        print ("export tree " + self.emotion)
+        print ("export tree" + self.__emotion)
 
 # Prediction
 
