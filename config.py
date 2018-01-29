@@ -21,5 +21,8 @@ def labelToStr(label):
             return string
     print ("Illegal emotion lable number")
 
+YES = 1
+NO = 0
+
 # CROSS VALIDATION
 CROSS_VALIDATION_FOLDS = 10

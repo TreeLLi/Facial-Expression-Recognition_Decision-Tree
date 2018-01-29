@@ -42,13 +42,17 @@ def crossValidation(dataset, fold, fold_num):
     return (train_list,test_list)
 
 def subDataset(dataset, attr):
-    dataset_tmp = copy.deepcopy(dataset)
-    dataset_tmp.sort( key=lambda attribute:attribute[attr-1])
-    count = 0
-    for i in dataset_tmp:
-        if i[attr-1] == 1:
-            break
-        count = count+1
-    zero_dataset = dataset_tmp[0:count]
-    first_dataset = dataset_tmp[count:]
+    # dataset_tmp = copy.deepcopy(dataset)
+    # dataset_tmp.sort( key=lambda attribute:attribute[attr-1])
+    # count = 0
+    # for i in dataset_tmp:
+    #     if i[attr] == 1:
+    #         break
+    #     count = count+1
+    # zero_dataset = dataset_tmp[0:count]
+    # first_dataset = dataset_tmp[count:]
+    sub_1 = []
+    sub_0 = []
+    for idx, sample in dataset[0]:
+        
     return [zero_dataset, first_dataset]
