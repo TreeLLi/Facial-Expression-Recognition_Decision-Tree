@@ -1,66 +1,45 @@
 # Data Processor works for loading and preprocessing, format and split etc.
 
+# Data Processor works for loading and preprocessing, format and split etc.
 import scipy.io
 import numpy as np
-import math
-import copy
+
 # Load data
-        
 def readDataFromMat(file_name):
     print("read data: " + file_name)
-    cleanDataX = scipy.io.loadmat(file_name)['x'].tolist()
-    cleanDataY = scipy.io.loadmat(file_name)['y'].tolist()
-    num_of_rows = len(cleanDataY)
-    #print(num_of_rows)
-    newcleandataY = np.zeros(num_of_rows,int)
-    for row in range(newcleandataY.shape[0]):
-        newcleandataY[row] = cleanDataY[row][0]
-    return (cleanDataX, newcleandataY.tolist())
+    raw_data_X = scipy.io.loadmat(file_name)['x'].tolist() #transfer data from first mat table to list
+    raw_data_Y = scipy.io.loadmat(file_name)['y'].tolist() #transfer data from second mat table to list
+    num_of_rows = len(raw_data_Y)                          #calculate number of rows
+    new_data_list_Y = np.zeros(num_of_rows, int)             #create a new 1*n list initilized with all zero
+    for row in range(new_data_list_Y.shape[0]): #read every element of the two-dimensional list, and put it in a 1*n list
+        new_data_list_Y[row] = raw_data_Y[row][0]
+    return (raw_data_X, new_data_list_Y.tolist())
+
 # Split and divide
-
-def crossValidation(dataset, fold, fold_num):
-    # set_length=len(dataset) / float(fold_num)
-    # n = int(math.ceil(set_length))
-    # set_no = (fold-1)*n
-    # train_list = copy.deepcopy(dataset[set_no:set_no+n])
-    # test_list = copy.deepcopy(dataset)
-    # del test_list[0][set_no:set_no+n]
-    # del test_list[1][set_no:set_no+n]
-
-    fold_unit_amount = int(len(dataset[0]) / float(fold_num))
-    start = fold * fold_unit_amount
-    end = start + fold_unit_amount
+def crossValidation(dataset, fold, fold_num): # fold: current test fold no, fold_num: fold value
+    fold_unit_amount = int(len(dataset[0]) / float(fold_num))#total length of dataset X divided by the fold value
+    start = (fold-1) * fold_unit_amount                         #the starting row based on fold no
+    end = start + fold_unit_amount                          #starting row + unit length
     samples = dataset[0]
     labels = dataset[1]
-    train_samples = samples[0:start] + samples[end:-1]
+    train_samples = samples[0:start] + samples[end:-1]      #combine other rows of data except the folding rows
     train_labels = labels[0:start] + labels[end:-1]
-    train_list = [train_samples, train_labels]
-    test_list = [samples[start:end], labels[start:end]]
-    
-    # return (train_list, test_list)
-    # train_list is [[x-samples:N*45], [y-labels:1*N]]
+    train_list = [train_samples, train_labels]            #combine folding samples list and labels list as a traing list
+    test_list = [samples[start:end], labels[start:end]]   #combine rest lists as a testing list
     return (train_list,test_list)
 
+
 def subDataset(dataset, attr):
-    # dataset_tmp = copy.deepcopy(dataset)
-    # dataset_tmp.sort( key=lambda attribute:attribute[attr-1])
-    # count = 0
-    # for i in dataset_tmp:
-    #     if i[attr] == 1:
-    #         break
-    #     count = count+1
-    # zero_dataset = dataset_tmp[0:count]
-    # first_dataset = dataset_tmp[count:]
     sub_1 = [[], []]
     sub_0 = [[], []]
-    for idx, sample in enumerate(dataset[0]):
-        attr_value = sample[attr]
-        label = dataset[1][idx]
-        if attr_value == 1:
+    for idx, sample in enumerate(dataset[0]): #idx:index sample:element, reading through every row
+        attr_value = sample[attr-1] #look at specific attribute value based on the index 'attr'
+        label = dataset[1][idx]     #find the corresponding label of that attr
+        if attr_value == 1:         #if attribute value is 1, append to sub_1
             sub_1[0].append(sample)
             sub_1[1].append(label)
-        else:
+        else:                       #if attribute value is 0, append to sub_0
             sub_0[0].append(sample)
             sub_0[1].append(label)
-            
+
     return (sub_0, sub_1)
