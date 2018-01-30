@@ -27,12 +27,12 @@ if __name__ == '__main__':
 
     # train models on the entire clean datasetsets
     clean_entire_dts = []
-    for emotion in emotions:
-        print ("Training " + emotion + " tree on the clean dataset:")
-        dt = learnModel(emotion, clean_dataset)
-        clean_entire_dts.append(dt)
-        dt.visualise()
-        dt.export()
+    # for emotion in emotions:
+    #     print ("Training " + emotion + " tree on the clean dataset:")
+    #     dt = learnModel(emotion, clean_dataset)
+    #     clean_entire_dts.append(dt)
+    #     dt.visualise()
+    #     dt.export()
     
     for dataset in [clean_dataset, noisy_dataset]:
         dts_matrix = []
@@ -64,7 +64,7 @@ if __name__ == '__main__':
             
             pdts_matrix.append(pdts_row)
             labels_matrix.append(test_dataset[1])
-            
+
         # # evaluate the results of predictions
         # cf_matrix, recalls, precisions, f1s, classifications = evaluate(labels_matrix, pdts_matrix)
         # if dataset is clean_dataset:

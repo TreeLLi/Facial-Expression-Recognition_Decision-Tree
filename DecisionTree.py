@@ -63,7 +63,7 @@ class DecisionTree:
     def predictSample(self, sample):
         key = sample[self.__rootAttribute]
         if isinstance(self.branchs[key], DecisionTree):
-            self.branchs[key].predictSample(sample)
+            return self.branchs[key].predictSample(sample)
         else:
             return self.branchs[key]
 
