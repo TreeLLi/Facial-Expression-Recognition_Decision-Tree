@@ -3,31 +3,30 @@ from config import *
 
 class DecisionTree:
 
-    def __init__(self, emotion, attribute = -1):
-        self.attribute = attribute
+    def __init__(self, emotion, attr = -1):
+        self.__rootAttribute = attr
         self.__emotion = emotion
-        self.tree = {1: None, 0: None}
+        self.branchs = {1: None, 0: None}
 
 # Accessing
 
     def op(self):
-        return self.attribute
+        return self.__rootAttribute
 
     def kids(self):
-
         self.kids = []
-        for key in self.tree.keys():
-            if isinstance(self.tree[key], DecisionTree):
-                self.kids.append(self.tree[key].op())
+        for key in self.branchs.keys():
+            if isinstance(self.branchs[key], DecisionTree):
+                self.kids.append(self.branchs[key].op())
         return self.kids
 
 
     def classification(self):
         # substitue the name 'class' referred in the manual
         self.labels = []
-        for key in self.tree.keys():
-            if not isinstance(self.tree[key], DecisionTree):
-                self.labels.append(self.tree[key])
+        for key in self.branchs.keys():
+            if not isinstance(self.branchs[key], DecisionTree):
+                self.labels.append(self.branchs[key])
         return self.labels
 
     def emotion(self):
@@ -37,16 +36,16 @@ class DecisionTree:
 # Setting
 
     def newLeaf(self, key, value):
-        self.tree[key] = value
+        self.branchs[key] = value
         return value
 
-    def newNode(self, key, attr):
+    def newSubtree(self, key, attr):
         self.sub_dt = DecisionTree(self.__emotion, attr)
-        self.tree[key] = self.sub_dt
+        self.branchs[key] = self.sub_dt
         return self.sub_dt
 
     def setAttribute(self, attr):
-        self.attr = attr
+        self.__rootAttribute = attr
 
 
 # Visualisation and Export
