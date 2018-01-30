@@ -4,6 +4,7 @@ import scipy.io
 import numpy as np
 import math
 import copy
+
 # Load data
         
 def readDataFromMat(file_name):
@@ -63,4 +64,4 @@ def subDataset(dataset, attr):
             sub_0[0].append(sample)
             sub_0[1].append(label)
             
-    return (sub_0, sub_1)
+    return [sub_0, sub_1]
