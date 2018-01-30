@@ -44,27 +44,27 @@ if __name__ == '__main__':
             pdts_matrix.append(pdts_row)
             labels_matrix.append(test_dataset[1])
             
-        # evaluate the results of predictions
-        cf_matrix, recalls, precisions, f1s, classifications = evaluate(labels_matrix, pdts_matrix)
-        if dataset is clean_dataset:
-            print ("The evaluation for the clean dataset:\n")
-        else:
-            print ("The evaluation for the noisy dataset:\n")
+        # # evaluate the results of predictions
+        # cf_matrix, recalls, precisions, f1s, classifications = evaluate(labels_matrix, pdts_matrix)
+        # if dataset is clean_dataset:
+        #     print ("The evaluation for the clean dataset:\n")
+        # else:
+        #     print ("The evaluation for the noisy dataset:\n")
             
-        print ("Confusion Matrix: ")
-        print (cf_matrix)
+        # print ("Confusion Matrix: ")
+        # print (cf_matrix)
             
-        print ("Recall rates: ")
-        print (recalls)
+        # print ("Recall rates: ")
+        # print (recalls)
 
-        print ("Precision rates: ")
-        print (precisions)
+        # print ("Precision rates: ")
+        # print (precisions)
 
-        print ("F1 measurements: ")
-        print (f1s)
+        # print ("F1 measurements: ")
+        # print (f1s)
                 
-        print ("Classification rates: ")
-        print (classifications)
+        # print ("Classification rates: ")
+        # print (classifications)
         
 
         
