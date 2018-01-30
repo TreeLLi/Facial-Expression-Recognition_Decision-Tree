@@ -51,8 +51,16 @@ def subDataset(dataset, attr):
     #     count = count+1
     # zero_dataset = dataset_tmp[0:count]
     # first_dataset = dataset_tmp[count:]
-    sub_1 = []
-    sub_0 = []
-    for idx, sample in dataset[0]:
-        
-    return [zero_dataset, first_dataset]
+    sub_1 = [[], []]
+    sub_0 = [[], []]
+    for idx, sample in enumerate(dataset[0]):
+        attr_value = sample[attr]
+        label = dataset[1][idx]
+        if attr_value == 1:
+            sub_1[0].append(sample)
+            sub_1[1].append(label)
+        else:
+            sub_0[0].append(sample)
+            sub_0[1].append(label)
+            
+    return (sub_0, sub_1)

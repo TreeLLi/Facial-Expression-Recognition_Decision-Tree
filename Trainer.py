@@ -1,6 +1,7 @@
 # Decision tree trainer dedicated to determine the best entry feature and update the tree structure
 
 from DecisionTree import *
+from DataProcessor import subDataset
 from config import *
 
 from math import log
@@ -94,7 +95,9 @@ def learn(dt, dataset, attributes):
             branch = samples[0][root_attr]
             branched_dt = dt.newNode(branch, best_attr)
         for branch in (YES, NO):
-            sub_dataset = subDataset(dataset, best_attr)
+            sub_dataset = subDataset(dataset, best_attr)[branch]
+            
+        
 
 def learnModel(emotion, dataset):
     dt = DecisionTree(emotion)
