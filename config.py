@@ -12,6 +12,8 @@ __LABELS = {"anger" : 1,
                   "sadness" : 5,
                   "surprise" : 6}
 
+EMOTION_AMOUNT = len(__LABELS)
+
 def labelToNo(label):
     return __LABELS[label]
 

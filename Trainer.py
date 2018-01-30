@@ -21,7 +21,7 @@ def areAttributesSame(samples, attribute):
     return True
 
 def majorityValue(emotion, labels):
-    counts = (0, 0)
+    counts = [0, 0]
     for label in labels:
         if label == emotion:
             counts[0] += 1
@@ -34,10 +34,15 @@ def majorityValue(emotion, labels):
         return NO
 
 def entropy(p, n):
+    if p==0.0 and n==0.0:
+        return 0.0
+    
     first = p / (p+n)
-    first = -1 * first * log(first, 2)
+    if first != 0.0:
+        first = -1 * first * log(first, 2)
     second = n / (p+n)
-    second = -1 * second * log(second, 2)
+    if second != 0.0:
+        second = -1 * second * log(second, 2)
     return first + second
 
 def remainder(p, n, p0, p1, n0, n1):
@@ -58,6 +63,7 @@ def selectBestAttr(samples, labels, emotion, attributes):
             p1 += 1 if (label==emotion and attr_value==1) else 0
             n0 += 1 if (label!=emotion and attr_value==0) else 0
             n1 += 1 if (label!=emotion and attr_value==1) else 0
+        #print ("ig {6} p:{0} n:{1} p0:{2} p1:{3} n0:{4} n1:{5}".format(p, n, p0, p1, n0, n1, attribute))
         ig = entropy(p, n) - remainder(p, n, p0, p1, n0, n1)
         igs.append(ig)
         
@@ -65,14 +71,14 @@ def selectBestAttr(samples, labels, emotion, attributes):
     for idx, ig in enumerate(igs):
         max_idx= idx if ig>igs[max_idx] else max_idx
 
-    return max_idx
+    return attributes[max_idx]
     
 def learn(dt, dataset, attributes):
     samples = dataset[0]
     labels = dataset[1]
     emotion = dt.emotion()
     root_attr = dt.op()
-    
+
     if areLabelsSame(labels):
         # all samples share the same emotion
         leaf_value = YES if emotion==labels[0] else NO
@@ -80,32 +86,44 @@ def learn(dt, dataset, attributes):
             dt.newLeaf(YES, leaf_value)
             dt.newLeaf(NO, leaf_value)
         elif areAttributesSame(samples, root_attr):
-            attr_value = samples[0][root_attr]
-            dt.newLeaf(attr_value, leaf_value)
+            branch = samples[0][root_attr]
+            dt.newLeaf(branch, leaf_value)
+            print ("New leaf {0} for the branch {1} of parent node {2} same value".format(leaf_value, branch, dt.op()))
     elif not attributes:
         # all features have been used
         leaf_value = majorityValue(emotion, labels)
-        dt.newLeaf(leaf_value)
+        branch = samples[0][root_attr]
+        dt.newLeaf(branch, leaf_value)
+        print ("New leaf {0} for the branch {1} of parent node {2} no attribute".format(leaf_value, branch, dt.op()))
     else:
+        #print ("Remaining attrs: {0}".format(attributes))
         best_attr = selectBestAttr(samples, labels, emotion, attributes)
         branched_dt = dt
         if root_attr == -1:
             dt.setAttribute(best_attr)
+            print ("The root:" + str(dt.op()))
         else:
             branch = samples[0][root_attr]
-            branched_dt = dt.newNode(branch, best_attr)
+            branched_dt = dt.newSubtree(branch, best_attr)
+            print ("New node {0} for the branch {1} of parent node {2}".format(branched_dt.op(), branch, dt.op()))
+
+        if attributes.count(best_attr) > 0:
+            attributes.remove(best_attr)
+        
         for branch in (YES, NO):
             sub_dataset = subDataset(dataset, best_attr)[branch]
-            
+            if not sub_dataset[0]:
+                leaf_value = majorityValue(emotion, sub_dataset[1])
+                branched_dt.newLeaf(branch, leaf_value)
+                print ("New leaf {0} for the branch {1} of parent node {2} no data".format(leaf_value, branch, branched_dt.op()))
+            else:
+                learn(branched_dt, sub_dataset, attributes)
         
 
 def learnModel(emotion, dataset):
     dt = DecisionTree(emotion)
     attributes = list(range(0, 44))
 
-    # print (dataset[0][0])
-    # print (dataset[1][0])
-    
     learn(dt, dataset, attributes)
     return dt
 
