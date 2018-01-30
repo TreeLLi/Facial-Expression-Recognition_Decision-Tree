@@ -14,20 +14,20 @@ class DecisionTree:
         return self.__rootAttribute
 
     def kids(self):
-        self.kids = []
+        kids = []
         for key in self.branchs.keys():
             if isinstance(self.branchs[key], DecisionTree):
-                self.kids.append(self.branchs[key].op())
-        return self.kids
+                kids.append(self.branchs[key].op())
+        return kids
 
 
     def classification(self):
         # substitue the name 'class' referred in the manual
-        self.labels = []
+        labels = []
         for key in self.branchs.keys():
             if not isinstance(self.branchs[key], DecisionTree):
-                self.labels.append(self.branchs[key])
-        return self.labels
+                labels.append(self.branchs[key])
+        return labels
 
     def emotion(self):
         return labelToNo(self.__emotion)
@@ -40,9 +40,9 @@ class DecisionTree:
         return value
 
     def newSubtree(self, key, attr):
-        self.sub_dt = DecisionTree(self.__emotion, attr)
-        self.branchs[key] = self.sub_dt
-        return self.sub_dt
+        sub_dt = DecisionTree(self.__emotion, attr)
+        self.branchs[key] = sub_dt
+        return sub_dt
 
     def setAttribute(self, attr):
         self.__rootAttribute = attr
