@@ -43,3 +43,6 @@ def subDataset(dataset, attr):
             sub_0[1].append(label)
 
     return (sub_0, sub_1)
+
+def saveObjects(objects):
+    
