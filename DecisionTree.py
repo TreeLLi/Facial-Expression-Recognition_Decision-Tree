@@ -61,6 +61,7 @@ class DecisionTree:
 
     # predict the emotion of single one sample
     def predictSample(self, sample):
+
         if not sample:
             return -1
         else:

@@ -18,7 +18,7 @@ def readDataFromMat(file_name):
 # Split and divide
 def crossValidation(dataset, fold, fold_num): # fold: current test fold no, fold_num: fold value
     fold_unit_amount = int(len(dataset[0]) / float(fold_num))#total length of dataset X divided by the fold value
-    start = (fold-1) * fold_unit_amount                         #the starting row based on fold no
+    start = fold * fold_unit_amount                         #the starting row based on fold no
     end = start + fold_unit_amount                          #starting row + unit length
     samples = dataset[0]
     labels = dataset[1]
@@ -33,7 +33,7 @@ def subDataset(dataset, attr):
     sub_1 = [[], []]
     sub_0 = [[], []]
     for idx, sample in enumerate(dataset[0]): #idx:index sample:element, reading through every row
-        attr_value = sample[attr-1] #look at specific attribute value based on the index 'attr'
+        attr_value = sample[attr] #look at specific attribute value based on the index 'attr'
         label = dataset[1][idx]     #find the corresponding label of that attr
         if attr_value == 1:         #if attribute value is 1, append to sub_1
             sub_1[0].append(sample)
