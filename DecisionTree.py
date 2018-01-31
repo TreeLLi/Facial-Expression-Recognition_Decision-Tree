@@ -62,13 +62,13 @@ class DecisionTree:
     # predict the emotion of single one sample
     def predictSample(self, sample):
         if not sample:
+            return -1
+        else:
             key = sample[self.__rootAttribute]
             if isinstance(self.branchs[key], DecisionTree):
                 return self.branchs[key].predictSample(sample)
             else:
                 return self.branchs[key]
-        else:
-            return []
 
     # predict the emotions of given samples
     def predict(self, samples):
