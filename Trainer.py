@@ -108,7 +108,8 @@ def learn(dt, dataset, attributes):
             print ("New node {0} for the branch {1} of parent node {2}".format(branched_dt.op(), branch, dt.op()))
 
         if attributes.count(best_attr) > 0:
-            attributes.remove(best_attr)
+            sub_attrs = list(attributes)
+            sub_attrs.remove(best_attr)
         
         for branch in (YES, NO):
             sub_dataset = subDataset(dataset, best_attr)[branch]
@@ -117,7 +118,7 @@ def learn(dt, dataset, attributes):
                 branched_dt.newLeaf(branch, leaf_value)
                 print ("New leaf {0} for the branch {1} of parent node {2} no data".format(leaf_value, branch, branched_dt.op()))
             else:
-                learn(branched_dt, sub_dataset, attributes)
+                learn(branched_dt, sub_dataset, sub_attrs)
         
 
 def learnModel(emotion, dataset):
