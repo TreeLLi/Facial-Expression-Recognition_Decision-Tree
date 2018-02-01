@@ -6,10 +6,16 @@ from config import *
 
 from math import log
 
-def areLabelsSame(labels):
-    base = labels[0]
+def areLabelsSame(emotion, labels):
+    pos = 0
+    neg = 0
     for label in labels:
-        if base != label:
+        if emotion == label:
+            pos += 1
+        else:
+            neg += 1
+
+        if pos*neg != 0:
             return False
     return True
 
@@ -79,7 +85,7 @@ def learn(dt, dataset, attributes):
     emotion = dt.emotion()
     root_attr = dt.op()
 
-    if areLabelsSame(labels):
+    if areLabelsSame(emotion, labels):
         # all samples share the same emotion
         leaf_value = YES if emotion==labels[0] else NO
         if root_attr == -1:
