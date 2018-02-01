@@ -69,7 +69,7 @@ def selectBestAttr(samples, labels, emotion, attributes):
             p1 += 1 if (label==emotion and attr_value==1) else 0
             n0 += 1 if (label!=emotion and attr_value==0) else 0
             n1 += 1 if (label!=emotion and attr_value==1) else 0
-        #print ("ig {6} p:{0} n:{1} p0:{2} p1:{3} n0:{4} n1:{5}".format(p, n, p0, p1, n0, n1, attribute))
+        # print ("ig {6} p:{0} n:{1} p0:{2} p1:{3} n0:{4} n1:{5}".format(p, n, p0, p1, n0, n1, attribute))
         ig = entropy(p, n) - remainder(p, n, p0, p1, n0, n1)
         igs.append(ig)
         
@@ -119,8 +119,9 @@ def learn(dt, dataset, attributes):
         
         for branch in (YES, NO):
             sub_dataset = subDataset(dataset, best_attr)[branch]
+            
             if not sub_dataset[0]:
-                leaf_value = majorityValue(emotion, sub_dataset[1])
+                leaf_value = majorityValue(emotion, labels)
                 branched_dt.newLeaf(branch, leaf_value)
                 print ("New leaf {0} for the branch {1} of parent node {2} no data".format(leaf_value, branch, branched_dt.op()))
             else:
