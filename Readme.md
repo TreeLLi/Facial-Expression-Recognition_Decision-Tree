@@ -25,4 +25,6 @@ These files, currently `*.pyc` and `__pycache__`, have already been blocked to b
 
 Kindly please **add any external libraries you're using but not in this list** into here so that others can know what he/she should prepare:
 
-* Currently Nothing
+* import scipy.io (version:0.17.0)
+* import numpy as np (version:1.11.0)
+* import pickle (version:3.0)
