@@ -21,13 +21,12 @@ def predict_overall(tree_pdts):
 if __name__ == '__main__':
     print ('Main program:\n')
 
-    emotions = ["anger", "disgust", "fear", "happiness", "sadness", "surprise"]    
     clean_dataset = readDataFromMat(CLEAN_DATASET)
     noisy_dataset = readDataFromMat(NOISY_DATASET)
 
     # train models on the entire clean datasetsets
     clean_entire_dts = []
-    for emotion in emotions:
+    for emotion in EMOTIONS:
         print ("\n")
         print ("Training " + emotion + " tree on the clean dataset:")
         dt = learnModel(emotion, clean_dataset)
@@ -45,7 +44,7 @@ if __name__ == '__main__':
     #         train_dataset, test_dataset = crossValidation(dataset, fold, CROSS_VALIDATION_FOLDS)
     #         # learn the models for each emotion for each fold, i.e. 6*10 classifiers
     #         dts_row = []
-    #         for emotion in emotions:
+    #         for emotion in EMOTIONS:
     #             if dataset is clean_dataset:
     #                 print ("Training {0} tree for {1} fold of clean dataset:".format(emotion, fold))
     #             else:
