@@ -16,6 +16,7 @@ def readDataFromMat(file_name):
     return (raw_data_X, new_data_list_Y.tolist())
 
 # Split and divide
+
 def crossValidation(dataset, fold, fold_num): # fold: current test fold no, fold_num: fold value
     fold_unit_amount = int(len(dataset[0]) / float(fold_num))#total length of dataset X divided by the fold value
     start = fold * fold_unit_amount                         #the starting row based on fold no
@@ -44,5 +45,19 @@ def subDataset(dataset, attr):
 
     return (sub_0, sub_1)
 
+def saveObject(object):
+    # save single object into the binary file
+    # the name of binary file should be "dt_<specific emotion>.extension"
+    pass
+
 def saveObjects(objects):
-    
+    # save objects into binary files
+    pass
+
+def retrieveObject(file_name):
+    # retrieve single object from corresponding binary file
+    pass
+
+def retrieveObjects(file_names):
+    # retrieve objects from the saved binary files
+    pass

@@ -31,7 +31,7 @@ def tfMatrix(emotion,confusionMarix):
     for i in range(6):
         for j in range(6):
             if i==emotionIndex and j==emotionIndex:
-                tf_matrix[0][0]=confusionMarix[i][j]
+                tf_matrix[0][0]=confusionMarix[i] [j]
             elif i==emotionIndex and j!=emotionIndex:
                 tf_matrix[0][1] += confusionMarix[i][j]
             elif i!=emotionIndex and j==emotionIndex:
@@ -85,3 +85,9 @@ def evaluate(labels, pdts):
     c_r=classificationRate("a", labels, pdts)
     return (ave_cf_matrix, recall_rate, precision_rate,f_1 ,c_r )
 
+# Save results into files
+
+def saveEvaluations(file_name, evaluations):
+    # able to detect the data structures of passed evaluations
+    # then write them into a single file with given file name automatically
+    pass

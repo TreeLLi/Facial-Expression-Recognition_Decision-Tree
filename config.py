@@ -5,12 +5,13 @@ CLEAN_DATASET = "cleandata_students.mat"
 NOISY_DATASET = "noisydata_students.mat"
 
 # EMOTHIONS LABELS
+EMOTIONS = ["anger", "disgust", "fear", "happiness", "sadness", "surprise"]
 __LABELS = {"anger" : 1,
-                  "disgust" : 2,
-                  "fear" : 3,
-                  "happiness" : 4,
-                  "sadness" : 5,
-                  "surprise" : 6}
+            "disgust" : 2,
+            "fear" : 3,
+            "happiness" : 4,
+            "sadness" : 5,
+            "surprise" : 6}
 
 EMOTION_AMOUNT = len(__LABELS)
 
