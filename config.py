@@ -18,7 +18,7 @@ def labelToNo(label):
     return __LABELS[label]
 
 def labelToStr(label):
-    for string, number in __LABELS:
+    for string, number in __LABELS.items():
         if number == label:
             return string
     print ("Illegal emotion lable number")
