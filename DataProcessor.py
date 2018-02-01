@@ -48,30 +48,17 @@ def subDataset(dataset, attr):
             sub_0[1].append(label)
 
     return (sub_0, sub_1)
-# def saveObject(object):
-#     emotion_label = object.emotion()
-#     emotion_string = labelToStr(emotion_label)
-#     filename = "dt_"+emotion_string +".pkl"
-#     with open(filename, 'wb') as f:
-#         pickle.dump(object,f)
-#     # save single object into the binary file
-#     # the name of binary file should be "dt_<specific emotion>.extension"
-#     return
+
+#save objects to a binary file
 def saveObjects(objects):
     file_name = 'decision_tree.pkl'
     with open(file_name, 'wb') as f:
         pickle.dump(objects,f)
     return file_name
 
+#retrive objects from a binary file
 def retrieveObjects(file_name):
     # retrieve objects from the saved binary files
     with open(file_name,'rb') as f:
         objects = pickle.load(f)
     return objects
-
-# x,y = readDataFromMat("cleandata_students.mat")
-dataset = [[[1,1,1],[2,0,2],[3,1,3],[4,0,4],[5,1,5],[6,0,6]],[1,2,3,4,5,6]]
-first, second = crossValidation(dataset, 2,4)
-# first1, second1 = subDataset(dataset,2)
-print(first, second)
-# print(first1,second1)
