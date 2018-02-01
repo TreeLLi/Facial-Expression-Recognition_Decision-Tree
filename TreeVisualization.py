@@ -26,13 +26,13 @@ def getTreeDepth(tree):
     return maxDepth
 
 def plotNode(nodeAttribute, nodeX, nodeY, nodeType):
-    visualise.ax.text(nodeX, nodeY, nodeAttribute, ha = "center", va = "center", size = 5, bbox = nodeType)
+    visualise.ax.text(nodeX, nodeY, nodeAttribute, ha = "center", va = "center", size = 8, bbox = nodeType)
 
 def plotArrow(startX, startY, endX, endY):
     visualise.ax.annotate("",
                             xy = (endX, endY), xycoords = 'data',
                             xytext = (startX, startY), textcoords = 'data',
-                            size = 5, ha = "center", va = "center",
+                            size = 8, ha = "center", va = "center",
                             arrowprops = dict(arrowstyle = "->", connectionstyle = "arc3"),
                         )
 
@@ -79,9 +79,10 @@ def visualise(tree):
     plotTree.totalD = float(getTreeDepth(tree))
     visualise.ax.set_xlim(0, plotTree.totalW)
     visualise.ax.set_ylim(0, plotTree.totalD)
-    plotTree.xOff = 1.0
+    plotTree.xOff = 0.5
     plotTree.yOff = 1.0
-    plotTree(tree, plotTree.totalW, plotTree.totalW, 1.0 + plotTree.totalD, True)
+    plotTree(tree, plotTree.totalW, plotTree.totalW, 1.1 + plotTree.totalD, True)
     figName = labelToStr(tree.emotion())
+    plt.axis('off')
     plt.savefig(figName + '.png')
     plt.show()
