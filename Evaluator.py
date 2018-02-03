@@ -73,7 +73,7 @@ def evaluate(labels, pdts):
         recall_rate.append(recallRate(EMOTIONS[i],ave_cf_matrix))
         precision_rate.append(precisionRate(EMOTIONS[i], ave_cf_matrix))
         f_1.append(f1(recall_rate[i], precision_rate[i]))
-    c_r=classificationRate("a",labels,pdts)
+    c_r=[classificationRate("a",labels,pdts)]
     argument = [ave_cf_matrix, recall_rate, precision_rate, f_1, c_r]
     return (ave_cf_matrix,recall_rate,precision_rate,f_1 ,c_r )
 
