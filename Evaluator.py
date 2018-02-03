@@ -38,11 +38,17 @@ def tfMatrix(emotion,confusionMarix):
 def recallRate(emotion, cf_matrix):
     # print ("Recall rate for " + emotion)
     tf_matrix=tfMatrix(emotion,cf_matrix)
+    if(tf_matrix[0][0]+tf_matrix[0][1]==0):
+        print("There is no"+emotion+" example")
+        exit(1)
     return tf_matrix[0][0]/(tf_matrix[0][0]+tf_matrix[0][1])
 
 def precisionRate(emotion, cf_matrix):
     # print ("Precision rate for " + emotion)
     tf_matrix=tfMatrix(emotion,cf_matrix)
+    if(tf_matrix[0][0]+tf_matrix[0][1]==0):
+        print("There is no"+emotion+" example")
+        exit(1)
     precision_rate=(tf_matrix[0][0]/(tf_matrix[0][0]+tf_matrix[1][0]))
     return precision_rate
 
