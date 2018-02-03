@@ -94,13 +94,13 @@ def saveEvaluations(file_name,evaluations):
         for index in range(len(evaluations[argument_index])):
             if type(evaluations[argument_index][index]) is list:
                 for value in evaluations[argument_index][index]:
-                    file.write(str(value))
+                    file.write(str(round(value, 3)))
                     file.write(' ')
                 file.write('\n')
             else:
                 file.write(TITLE[argument_index-1]+'\n')
                 for value in evaluations[argument_index]:
-                    file.write(str(value))
+                    file.write(str(round(value, 3)))
                     file.write(' ')
                 file.write('\n')
                 break
