@@ -1,4 +1,5 @@
 make:
+	python --version
 	python Facs.py
 
 clean:

@@ -31,8 +31,8 @@ if __name__ == '__main__':
         print ("Training " + emotion + " tree on the clean dataset:")
         dt = learnModel(emotion, clean_dataset)
         clean_entire_dts.append(dt)
-        dt.visualise()
-        dt.export()
+        # dt.visualise()
+        # dt.export()
     
     for dataset in [clean_dataset, noisy_dataset]:
         dts_matrix = []
@@ -86,10 +86,10 @@ if __name__ == '__main__':
                 
         print ("Classification rates: ")
         print (classifications)
-        
 
-        
-        
-
-        
-        
+        # results = evaluate(labels_matrix, pdts_matrix)
+        # if dataset is clean_dataset:
+        #     file_name = "clean_evaluations"
+        # else:
+        #     file_name = "noisy_evaluations"
+        # saveEvaluations(file_name, results)

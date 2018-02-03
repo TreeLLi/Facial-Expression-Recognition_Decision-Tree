@@ -94,15 +94,14 @@ def learn(dt, dataset, attributes):
         elif areAttributesSame(samples, root_attr):
             branch = samples[0][root_attr]
             dt.newLeaf(branch, leaf_value)
-            print ("New leaf {0} for the branch {1} of parent node {2} same value".format(leaf_value, branch, dt.op()))
+            # print ("New leaf {0} for the branch {1} of parent node {2} same value".format(leaf_value, branch, dt.op()))
     elif not attributes:
         # all features have been used
         leaf_value = majorityValue(emotion, labels)
         branch = samples[0][root_attr]
         dt.newLeaf(branch, leaf_value)
-        print ("New leaf {0} for the branch {1} of parent node {2} no attribute".format(leaf_value, branch, dt.op()))
+        # print ("New leaf {0} for the branch {1} of parent node {2} no attribute".format(leaf_value, branch, dt.op()))
     else:
-        #print ("Remaining attrs: {0}".format(attributes))
         best_attr = selectBestAttr(samples, labels, emotion, attributes)
         branched_dt = dt
         if root_attr == -1:
@@ -111,7 +110,7 @@ def learn(dt, dataset, attributes):
         else:
             branch = samples[0][root_attr]
             branched_dt = dt.newSubtree(branch, best_attr)
-            print ("New node {0} for the branch {1} of parent node {2}".format(branched_dt.op(), branch, dt.op()))
+            # print ("New node {0} for the branch {1} of parent node {2}".format(branched_dt.op(), branch, dt.op()))
 
         if attributes.count(best_attr) > 0:
             sub_attrs = list(attributes)
@@ -123,7 +122,7 @@ def learn(dt, dataset, attributes):
             if not sub_dataset[0]:
                 leaf_value = majorityValue(emotion, labels)
                 branched_dt.newLeaf(branch, leaf_value)
-                print ("New leaf {0} for the branch {1} of parent node {2} no data".format(leaf_value, branch, branched_dt.op()))
+                # print ("New leaf {0} for the branch {1} of parent node {2} no data".format(leaf_value, branch, branched_dt.op()))
             else:
                 learn(branched_dt, sub_dataset, sub_attrs)
         
