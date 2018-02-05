@@ -34,7 +34,7 @@ def majorityValue(emotion, labels):
         else:
             counts[1] += 1
 
-    if counts[0] >= counts[1]:
+    if counts[0] > counts[1]:
         return YES
     else:
         return NO
@@ -116,7 +116,7 @@ def learn(dt, dataset, attributes):
             sub_attrs = list(attributes)
             sub_attrs.remove(best_attr)
         
-        for branch in (YES, NO):
+        for branch in (NO, YES):
             sub_dataset = subDataset(dataset, best_attr)[branch]
             
             if not sub_dataset[0]:
