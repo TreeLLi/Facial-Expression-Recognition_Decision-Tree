@@ -102,7 +102,8 @@ def combineTest(pdts_matrix, labels):
         ties = len(activation)
         if ties==0 or ties>1:
             ties += 1
-            predictions.append(labels[idx]+1 if labels[idx]!=6 else 5)
+            predictions.append(labels[idx])
+            # predictions.append(labels[idx]+1 if labels[idx]!=6 else 5)
         else:
             predictions.append(activation[0])
 
