@@ -82,6 +82,33 @@ class DecisionTree:
 
 # overall predictions
 
+def testCombine(trees, dataset):
+    samples = dataset[0]
+    labels = dataset[1]
+    pdts_matrix = []
+    for dt in trees:
+        pdts_matrix.append(dt.predict(samples))
+    predictions = combineTest(pdts_matrix, labels)
+    return predictions
+
+def combineTest(pdts_matrix, labels):
+    predictions = []
+    ties = 0
+    for idx in range(len(pdts_matrix[0])):
+        activation = []
+        for emotion in range(EMOTION_AMOUNT):
+            if pdts_matrix[emotion][idx] == 1:
+                activation.append(emotion+1)
+        ties = len(activation)
+        if ties==0 or ties>1:
+            ties += 1
+            predictions.append(labels[idx]+1 if labels[idx]!=6 else 5)
+        else:
+            predictions.append(activation[0])
+
+    print ("Ties proportion: " + str(ties/float(len(pdts_matrix[0]))))
+    return predictions
+
 def testTrees(trees, samples):
     pdts_matrix = []
     for dt in trees:
