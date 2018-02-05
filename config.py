@@ -34,3 +34,6 @@ CROSS_VALIDATION_FOLDS = 10
 RECALLS = [0.786, 0.672, 0.695, 0.786, 0.538, 0.786]
 PRECISIONS = [0.438, 0.773, 0.796, 0.871, 0.676, 0.848]
 F1s = [0.563, 0.719, 0.742, 0.826, 0.599, 0.816]
+
+# FILE INDEX TITLE
+TITLE = ['Recall rate:', 'Precision rate:', 'F1:', 'Classification rate:']
