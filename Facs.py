@@ -7,17 +7,6 @@ from Evaluator import *
 
 from config import *
 
-def predict_overall(tree_pdts):
-    overall_pdts = []
-    for idx in range(len(tree_pdts[0])):
-        for emotion in range(EMOTION_AMOUNT):
-            if tree_pdts[emotion][idx] == 1:
-                overall_pdts.append(emotion+1)
-                break
-            if emotion == EMOTION_AMOUNT-1:
-                overall_pdts.append(1)
-    return overall_pdts
-
 if __name__ == '__main__':
     print ('Main program:\n')
 
@@ -32,7 +21,6 @@ if __name__ == '__main__':
         dt = learnModel(emotion, clean_dataset)
         clean_entire_dts.append(dt)
         # dt.visualise()
-        # dt.export()
     
     for dataset in [clean_dataset, noisy_dataset]:
         dts_matrix = []
@@ -55,14 +43,7 @@ if __name__ == '__main__':
             dts_matrix.append(dts_row)
 
             # predict the emotions for samples of test dataset
-            tree_pdts = []
-            for dt in dts_row:
-                predictions = dt.predict(test_dataset[0])
-                tree_pdts.append(predictions)
-
-            pdts_row = predict_overall(tree_pdts)
-            
-            pdts_matrix.append(pdts_row)
+            pdts_matrix.append(testTrees(dts_row, test_dataset[0]))
             labels_matrix.append(test_dataset[1])
 
         # evaluate the results of predictions

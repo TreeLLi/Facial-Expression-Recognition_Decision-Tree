@@ -57,7 +57,7 @@ class DecisionTree:
     def export(self):
         print ("export tree" + self.__emotion)
 
-# Prediction
+# Single Tree Prediction
 
     # predict the emotion of single one sample
     def predictSample(self, sample):
@@ -77,3 +77,25 @@ class DecisionTree:
         for sample in samples:
             pdt.append(self.predictSample(sample))
         return pdt
+
+# overall predictions
+    
+def combine(pdts_matrix):
+    overall_pdts = []
+    for idx in range(len(pdts_matrix[0])):
+        for emotion in range(EMOTION_AMOUNT):
+            if pdts_matrix[emotion][idx] == 1:
+                overall_pdts.append(emotion+1)
+                break
+            if emotion == EMOTION_AMOUNT-1:
+                overall_pdts.append(1)
+    return overall_pdts
+    
+def testTrees(trees, samples):
+    pdts_matrix = []
+    for dt in trees:
+        pdts_matrix.append(dt.predict(samples))
+
+    predictions = combine(pdts_matrix)
+    return predictions
+    
