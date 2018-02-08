@@ -43,8 +43,11 @@ if __name__ == '__main__':
                 dts_row.append(dt)
             dts_matrix.append(dts_row)
 
+            # Test
+            # train_dataset, test_dataset = crossValidation(noisy_dataset, fold, CROSS_VALIDATION_FOLDS)
+            
             # predict the emotions for samples of test dataset
-            pdts_matrix.append(testTrees(dts_row, test_dataset[0]))
+            pdts_matrix.append(testTrees(dts_row, test_dataset))
             # pdts_matrix.append(testCombine(dts_row, test_dataset))
             labels_matrix.append(test_dataset[1])
 

@@ -43,11 +43,11 @@ class DecisionTree:
                 # print ("Tree depth " + str(depth))
             else:
                 depth += 1
-                if depth > self.maxDepth:
-                    self.maxDepth = depth
+            if depth > self.maxDepth:
+                self.maxDepth = depth
         return self.maxDepth
 
-# Setting
+# Setting 
 
     def newLeaf(self, key, value):
         self.branchs[key] = value
@@ -74,21 +74,35 @@ class DecisionTree:
 # Single Tree Prediction
 
     # predict the emotion of single one sample
-    def predictSample(self, sample):
-        if not sample:
-            return -1
-        else:
-            key = sample[self.__rootAttribute]
-            if isinstance(self.branchs[key], DecisionTree):
-                return self.branchs[key].predictSample(sample)
-            else:
-                return self.branchs[key]
+    # def predictSample(self, sample):
+    #     if not sample:
+    #         return -1
+    #     else:
+    #         key = sample[self.__rootAttribute]
+    #         if isinstance(self.branchs[key], DecisionTree):
+    #             return self.branchs[key].predictSample(sample)
+    #         else:
+    #             return self.branchs[key]
 
     # predict the emotions of given samples
+    # def predict(self, samples):
+    #     pdt = []
+    #     for sample in samples:
+    #         pdt.append(self.predictSample(sample))
+    #     return pdt
+    
+    # TEST
+    def predictSample(self, sample, depth):
+        key = sample[self.__rootAttribute]
+        if isinstance(self.branchs[key], DecisionTree):
+            return self.branchs[key].predictSample(sample, depth+1)
+        else:
+            return (self.branchs[key], depth+1)
+
     def predict(self, samples):
         pdt = []
         for sample in samples:
-            pdt.append(self.predictSample(sample))
+            pdt.append(self.predictSample(sample, 0))
         return pdt
 
 # overall predictions
@@ -104,7 +118,8 @@ class DecisionTree:
 
 # def combineTest(pdts_matrix, labels):
 #     predictions = []
-#     ties_amount = 0
+#     ties_0_amount = 0
+#     ties_2_amount = 0
 #     for idx in range(len(pdts_matrix[0])):
 #         activation = []
 #         for emotion in range(EMOTION_AMOUNT):
@@ -112,8 +127,8 @@ class DecisionTree:
 #                 activation.append(emotion+1)
 #         ties = len(activation)
 #         if ties==0 or ties>1:
-#             ties_amount += 1
-#             # predictions.append(labels[idx]+1 if labels[idx]!=6 else 5)
+#             ties_0_amount += 1 if ties>1 else 0
+#             ties_2_amount += 1 if ties==0 else 0
 #             label = decodeLabel(labels[idx])
 #             if activation.count(label)==1:
 #                 predictions.append(labels[idx])
@@ -122,32 +137,130 @@ class DecisionTree:
 #         else:
 #             predictions.append(encodeLabel(activation[0]))
 
-#     print ("Ties proportion: " + str(ties_amount/float(len(pdts_matrix[0]))))
+#     print ("Ties == 0:" + str(ties_0_amount) + "      >2: " + str(ties_2_amount))
+#     print ("Ties proportion: " + str((ties_0_amount+ties_2_amount)/float(len(pdts_matrix[0]))))
 #     return predictions
 
-def testTrees(trees, samples):
+# def testTrees(trees, samples):
+#     pdts_matrix = []
+#     for dt in trees:
+#         pdts_matrix.append(dt.predict(samples))
+
+#     predictions = combine(trees, pdts_matrix)
+#     return predictions
+
+# def combine(trees, pdts_matrix):
+#     activations = []
+#     for idx in range(len(pdts_matrix[0])):
+#         activation = []
+#         for emotion in range(EMOTION_AMOUNT):
+#             if pdts_matrix[emotion][idx] == 1:
+#                 activation.append(emotion+1)
+#         activations.append(activation)
+#     combinations = pick(trees, activations)
+
+#     predictions = []
+#     for prediction in combinations:
+#         predictions.append(encodeLabel(prediction))
+
+#     return predictions
+
+# TEST
+# def testTrees(trees, dataset):
+#     samples = dataset[0]
+#     labels = dataset[1]
+#     pdts_matrix = []
+#     for dt in trees:
+#         pdts_matrix.append(dt.predict(samples))
+
+#     predictions = combine(trees, pdts_matrix, labels)
+#     return predictions
+
+# def combine(trees, pdts_matrix, labels):
+#     activations = []
+#     for idx in range(len(pdts_matrix[0])):
+#         activation = []
+#         for emotion in range(EMOTION_AMOUNT):
+#             if pdts_matrix[emotion][idx] == 1:
+#                 activation.append(emotion+1)
+#         activations.append(activation)
+#     combinations = pick(trees, activations)
+
+#     predictions = []
+#     ties_0_amount = 0
+#     ties_2_amount = 0
+#     ties_0_right = 0
+#     ties_2_right = 0
+#     for idx, prediction in enumerate(combinations):
+#         predictions.append(encodeLabel(prediction))
+#         ties = len(activations[idx])
+#         label = decodeLabel(labels[idx])
+#         ties_0_amount += 1 if ties==0 else 0
+#         ties_2_amount += 1 if ties>1 else 0
+#         ties_0_right += 1 if ties==0 and label==prediction else 0
+#         ties_2_right += 1 if ties>1 and label==prediction else 0
+
+#     print ("Ties == 0:" + str(ties_0_amount) + "      right: " + str(ties_0_right))
+#     print ("Ties > 1:" + str(ties_2_amount) + "      right: " + str(ties_2_right))
+#     return predictions
+
+# TEST depth
+def testTrees(trees, dataset):
+    samples = dataset[0]
+    labels = dataset[1]
     pdts_matrix = []
     for dt in trees:
         pdts_matrix.append(dt.predict(samples))
 
-    predictions = combine(trees, pdts_matrix)
+    predictions = combine(trees, pdts_matrix, labels)
     return predictions
 
-def combine(trees, pdts_matrix):
+def combine(trees, pdts_matrix, labels):
     activations = []
+    combinations = []
     for idx in range(len(pdts_matrix[0])):
         activation = []
         for emotion in range(EMOTION_AMOUNT):
-            if pdts_matrix[emotion][idx] == 1:
-                activation.append(emotion+1)
+            if pdts_matrix[emotion][idx][0] == 1:
+                activation.append((emotion+1, pdts_matrix[emotion][idx][1]))
         activations.append(activation)
-    combinations = pick(trees, activations)
+
+        ties = len(activation)
+        if ties == 0:
+            max_idx = 0
+            max = pdts_matrix[max_idx][idx][1]
+            for emotion in range(EMOTION_AMOUNT):
+                max_idx = emotion if pdts_matrix[emotion][idx][1]>max else max_idx
+                max = pdts_matrix[max_idx][idx][1]
+            combinations.append(max_idx+1)
+        elif ties > 1:
+            min_idx = 0
+            min = activation[min_idx][1]
+            for emotion in range(len(activation)):
+                min_idx = emotion if activation[emotion][1]<min else min_idx
+                min = activation[min_idx][1]
+            combinations.append(activation[min_idx][0])
+        else:
+            combinations.append(activation[0][0])
 
     predictions = []
-    for prediction in combinations:
+    ties_0_amount = 0
+    ties_2_amount = 0
+    ties_0_right = 0
+    ties_2_right = 0
+    for idx, prediction in enumerate(combinations):
         predictions.append(encodeLabel(prediction))
+        ties = len(activations[idx])
+        label = decodeLabel(labels[idx])
+        ties_0_amount += 1 if ties==0 else 0
+        ties_2_amount += 1 if ties>1 else 0
+        ties_0_right += 1 if ties==0 and label==prediction else 0
+        ties_2_right += 1 if ties>1 and label==prediction else 0
 
+    print ("Ties == 0:" + str(ties_0_amount) + "   right: " + str(ties_0_right) + " - " + str(ties_0_right/float(ties_0_amount)))
+    print ("Ties > 1:" + str(ties_2_amount) + "   right: " + str(ties_2_right) + " - " + str(ties_2_right/float(ties_2_amount)))
     return predictions
+                
 
 # Random picking
 # def pick(trees, activations):
@@ -182,13 +295,15 @@ def pick(trees, activations):
         if ties == 1:
             predictions.append(activation[0])
         elif ties == 0:
-            mini_recall = recalls[0]
-            emotion = 1
-            for idx in range(EMOTION_AMOUNT):
-                recall = recalls[idx]
-                emotion = idx+1 if recall<mini_recall else emotion
-                mini_recall = recalls[emotion-1]
-            predictions.append(emotion)
+            # mini_recall = recalls[0]
+            # emotion = 1
+            # for idx in range(EMOTION_AMOUNT):
+            #     recall = recalls[idx]
+            #     emotion = idx+1 if recall<mini_recall else emotion
+            #     mini_recall = recalls[emotion-1]
+            # predictions.append(emotion)
+
+            predictions.append(emotionMax(range(1, 6), recalls))
         else:
             predictions.append(emotionMax(activation, precisions))
     return predictions
