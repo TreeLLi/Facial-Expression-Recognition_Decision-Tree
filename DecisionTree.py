@@ -49,7 +49,7 @@ class DecisionTree:
         maxDepth = 0
         for key in self.branchs.keys():
             if isinstance(self.branchs[key], DecisionTree):
-                depth = self.branchs[key].getTreeDepth() + 1
+                depth = self.branchs[key].depth() + 1
             else:
                 depth = 1
             if depth > maxDepth:
