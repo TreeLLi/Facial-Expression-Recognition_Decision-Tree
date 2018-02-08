@@ -1,7 +1,8 @@
 # Decision tree model class used to represent the structure of trained Decision Tree model, visualise and predict the emotion of given sample
 from config import *
-
+import TreeVisualization as TV
 import random
+import matplotlib.pyplot as plt
 
 class DecisionTree:
 
@@ -34,6 +35,26 @@ class DecisionTree:
     def emotion(self):
         return labelToNo(self.__emotion)
 
+    def getTreeWidth(self):
+        width = 0
+        for key in self.branchs.keys():
+            if isinstance(self.branchs[key], DecisionTree):
+                width += self.branchs[key].getTreeWidth()
+            else:
+                width += 1
+        return width
+
+    def getTreeDepth(self):
+        maxDepth = 0
+        for key in self.branchs.keys():
+            if isinstance(self.branchs[key], DecisionTree):
+                depth = self.branchs[key].getTreeDepth() + 1
+            else:
+                depth = 1
+            if depth > maxDepth:
+                maxDepth = depth
+        return maxDepth
+
 
 # Setting
 
@@ -52,18 +73,20 @@ class DecisionTree:
 
 # Visualisation and Export
 
-    def visualise(self):
+    def visualisation(self):
+        # please adjust the figsize in TreeVisualization class if overlap occurs, and then zoom in to observe the tree structure
+        TV.visualise(self)
         print ("visualise tree " + self.__emotion)
 
+    #
+    #
+    # def export(self):
+    #     print ("export tree" + self.__emotion)
 
-    def export(self):
-        print ("export tree" + self.__emotion)
-
-# Single Tree Prediction
+# Tree Prediction
 
     # predict the emotion of single one sample
     def predictSample(self, sample):
-
         if not sample:
             return -1
         else:
@@ -174,7 +197,7 @@ def pick(activations):
                 emotion = activated if precision>max_precision else emotion
             predictions.append(emotion)
     return predictions
-            
+
 # F1 measure based picking
 
 # def pick(activations):
