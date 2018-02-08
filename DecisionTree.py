@@ -1,7 +1,8 @@
 # Decision tree model class used to represent the structure of trained Decision Tree model, visualise and predict the emotion of given sample
 from config import *
-
+import TreeVisualization as TV
 import random
+import matplotlib.pyplot as plt
 
 class DecisionTree:
 
@@ -35,19 +36,28 @@ class DecisionTree:
     def emotion(self):
         return labelToNo(self.__emotion)
 
-    def depth(self, depth=0):
-        # print ("Tree depth " + str(depth))
+    def width(self):
+        width = 0
         for key in self.branchs.keys():
             if isinstance(self.branchs[key], DecisionTree):
-                self.branchs[key].depth(depth+1)
-                # print ("Tree depth " + str(depth))
+                width += self.branchs[key].getTreeWidth()
             else:
-                depth += 1
-            if depth > self.maxDepth:
-                self.maxDepth = depth
-        return self.maxDepth
+                width += 1
+        return width
 
-# Setting 
+    def depth(self):
+        maxDepth = 0
+        for key in self.branchs.keys():
+            if isinstance(self.branchs[key], DecisionTree):
+                depth = self.branchs[key].getTreeDepth() + 1
+            else:
+                depth = 1
+            if depth > maxDepth:
+                maxDepth = depth
+        return maxDepth
+
+
+# Setting
 
     def newLeaf(self, key, value):
         self.branchs[key] = value
@@ -64,14 +74,17 @@ class DecisionTree:
 
 # Visualisation and Export
 
-    def visualise(self):
+    def visualisation(self):
+        # please adjust the figsize in TreeVisualization class if overlap occurs, and then zoom in to observe the tree structure
+        TV.visualise(self)
         print ("visualise tree " + self.__emotion)
 
+    #
+    #
+    # def export(self):
+    #     print ("export tree" + self.__emotion)
 
-    def export(self):
-        print ("export tree" + self.__emotion)
-
-# Single Tree Prediction
+# Tree Prediction
 
     # predict the emotion of single one sample
     # def predictSample(self, sample):
@@ -99,6 +112,7 @@ class DecisionTree:
         else:
             return (self.branchs[key], depth+1)
 
+    # predict the emotions of given samples
     def predict(self, samples):
         pdt = []
         for sample in samples:
