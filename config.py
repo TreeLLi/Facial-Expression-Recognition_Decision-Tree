@@ -14,6 +14,7 @@ __LABELS = {"anger" : 1,
             "surprise" : 6}
 
 EMOTION_AMOUNT = len(__LABELS)
+ATTRIBUTE_AMOUNT = 45
 
 def labelToNo(label):
     return __LABELS[label]

@@ -83,12 +83,12 @@ def selectBestAttr(samples, labels, emotion, attributes):
         igs.append(ig)
 
     if areIGSame(igs):
-        return -1
+        return (-1, 0)
     else:
         max_idx = 0
         for idx, ig in enumerate(igs):
             max_idx= idx if ig>igs[max_idx] else max_idx
-        return attributes[max_idx]
+        return (attributes[max_idx], igs[max_idx])
     
 def learn(dt, dataset, attributes):
     samples = dataset[0]
@@ -112,16 +112,17 @@ def learn(dt, dataset, attributes):
         dt.newLeaf(branch, leaf_value)
         # print ("New leaf {0} for the branch {1} of parent node {2} no attribute".format(leaf_value, branch, dt.op()))
     else:
-        best_attr = selectBestAttr(samples, labels, emotion, attributes)
+        best_attr_ig = selectBestAttr(samples, labels, emotion, attributes)
+        best_attr = best_attr_ig[0]
         if best_attr == -1:
             dt.newLeaf(branch, leaf_value)
             return 
         branched_dt = dt
         if root_attr == -1:
-            dt.setAttribute(best_attr)
+            dt.setAttribute(best_attr_ig)
             print ("The root:" + str(dt.op()))
         else:
-            branched_dt = dt.newSubtree(branch, best_attr)
+            branched_dt = dt.newSubtree(branch, best_attr_ig)
             # print ("New node {0} for the branch {1} of parent node {2}".format(branched_dt.op(), branch, dt.op()))
 
         if attributes.count(best_attr) > 0:
@@ -140,7 +141,7 @@ def learn(dt, dataset, attributes):
 
 def learnModel(emotion, dataset):
     dt = DecisionTree(emotion)
-    attributes = list(range(0, 44))
+    attributes = list(range(0, ATTRIBUTE_AMOUNT-1))
 
     learn(dt, dataset, attributes)
     return dt

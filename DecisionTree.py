@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 
 class DecisionTree:
 
-    def __init__(self, emotion, attr = -1):
+    def __init__(self, emotion, attr = -1, ig=0):
         self.__rootAttribute = attr
         self.__emotion = emotion
         self.branchs = {1: None, 0: None}
-        self.maxDepth = 0
+        self.__ig = ig
 
 # Accessing
 
@@ -63,26 +63,27 @@ class DecisionTree:
         self.branchs[key] = value
         return value
 
-    def newSubtree(self, key, attr):
-        sub_dt = DecisionTree(self.__emotion, attr)
+    def newSubtree(self, key, attr_ig):
+        attr = attr_ig[0]
+        ig = attr_ig[1]
+        sub_dt = DecisionTree(self.__emotion, attr, ig)
         self.branchs[key] = sub_dt
         return sub_dt
 
-    def setAttribute(self, attr):
+    def setAttribute(self, attr_ig):
+        attr = attr_ig[0]
+        ig = attr_ig[1]
         self.__rootAttribute = attr
+        self.__ig = ig
 
 
 # Visualisation and Export
 
     def visualisation(self):
-        # please adjust the figsize in TreeVisualization class if overlap occurs, and then zoom in to observe the tree structure
+        # please adjust the figsize in TreeVisualization class if overlap occurs
+        # and then zoom in to observe the tree structure
         TV.visualise(self)
         print ("visualise tree " + self.__emotion)
-
-    #
-    #
-    # def export(self):
-    #     print ("export tree" + self.__emotion)
 
 # Tree Prediction
 
@@ -105,18 +106,18 @@ class DecisionTree:
     #     return pdt
     
     # TEST
-    def predictSample(self, sample, depth):
+    def predictSample(self, sample, depth=0, ig=0):
         key = sample[self.__rootAttribute]
         if isinstance(self.branchs[key], DecisionTree):
-            return self.branchs[key].predictSample(sample, depth+1)
+            return self.branchs[key].predictSample(sample, depth+1, ig+self.__ig)
         else:
-            return (self.branchs[key], depth+1)
+            return (self.branchs[key], depth+1, ig+self.__ig)
 
     # predict the emotions of given samples
     def predict(self, samples):
         pdt = []
         for sample in samples:
-            pdt.append(self.predictSample(sample, 0))
+            pdt.append(self.predictSample(sample))
         return pdt
 
 # overall predictions
@@ -233,19 +234,43 @@ def combine(trees, pdts_matrix, labels):
     activations = []
     combinations = []
     for idx in range(len(pdts_matrix[0])):
+        # activation = []
+        # for emotion in range(EMOTION_AMOUNT):
+        #     if pdts_matrix[emotion][idx][0] == 1:
+        #         activation.append((emotion+1, pdts_matrix[emotion][idx][1]))
+        # activations.append(activation)
+
+        # ties = len(activation)
+        # if ties == 0:
+        #     max_idx = 0
+        #     max = pdts_matrix[max_idx][idx][1]
+        #     for emotion in range(EMOTION_AMOUNT):
+        #         max_idx = emotion if pdts_matrix[emotion][idx][1]>max else max_idx
+        #         max = pdts_matrix[max_idx][idx][1]
+        #     combinations.append(max_idx+1)
+        # elif ties > 1:
+        #     min_idx = 0
+        #     min = activation[min_idx][1]
+        #     for emotion in range(len(activation)):
+        #         min_idx = emotion if activation[emotion][1]<min else min_idx
+        #         min = activation[min_idx][1]
+        #     combinations.append(activation[min_idx][0])
+        # else:
+        #     combinations.append(activation[0][0])
+
         activation = []
         for emotion in range(EMOTION_AMOUNT):
             if pdts_matrix[emotion][idx][0] == 1:
-                activation.append((emotion+1, pdts_matrix[emotion][idx][1]))
+                activation.append((emotion+1, pdts_matrix[emotion][idx][2]))
         activations.append(activation)
 
         ties = len(activation)
         if ties == 0:
             max_idx = 0
-            max = pdts_matrix[max_idx][idx][1]
+            max = pdts_matrix[max_idx][idx][2]
             for emotion in range(EMOTION_AMOUNT):
-                max_idx = emotion if pdts_matrix[emotion][idx][1]>max else max_idx
-                max = pdts_matrix[max_idx][idx][1]
+                max_idx = emotion if pdts_matrix[emotion][idx][2]>max else max_idx
+                max = pdts_matrix[max_idx][idx][2]
             combinations.append(max_idx+1)
         elif ties > 1:
             min_idx = 0
@@ -288,16 +313,6 @@ def combine(trees, pdts_matrix, labels):
 #             predictions.append(1)
 #     return predictions
 
-
-# 1st Picking Algorithm
-# def pick(trees, activations):
-#     predictions = []
-#     for activation in activations:
-#         if activation:
-#             predictions.append(activation[0])
-#         else:
-#             predictions.append(1)
-#     return predictions
 
 # Recall & precision based picking
 def pick(trees, activations):
