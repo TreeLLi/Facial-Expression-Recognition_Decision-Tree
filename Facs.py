@@ -19,6 +19,7 @@ if __name__ == '__main__':
         print ("\n")
         print ("Training " + emotion + " tree on the clean dataset:")
         dt = learnModel(emotion, clean_dataset)
+        print ("Trained tree " + emotion + " with depth " + str(dt.depth()))
         clean_entire_dts.append(dt)
         # dt.visualise()
     
@@ -43,8 +44,8 @@ if __name__ == '__main__':
             dts_matrix.append(dts_row)
 
             # predict the emotions for samples of test dataset
-            # pdts_matrix.append(testTrees(dts_row, test_dataset[0]))
-            pdts_matrix.append(testCombine(dts_row, test_dataset))
+            pdts_matrix.append(testTrees(dts_row, test_dataset[0]))
+            # pdts_matrix.append(testCombine(dts_row, test_dataset))
             labels_matrix.append(test_dataset[1])
 
         # evaluate the results of predictions

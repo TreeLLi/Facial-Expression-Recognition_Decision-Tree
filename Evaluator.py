@@ -8,8 +8,8 @@ def confusionMatrix(labels, predictions):
     for fold in range(CROSS_VALIDATION_FOLDS):
         len_fold_labels = len(labels[fold])
         for exp_num in range(len_fold_labels):
-            matrix_correspond_row = labels[fold][exp_num] - 1
-            matrix_correspond_column = predictions[fold][exp_num] - 1
+            matrix_correspond_row = decodeLabel(labels[fold][exp_num]) - 1
+            matrix_correspond_column = decodeLabel(predictions[fold][exp_num]) - 1
             cf_matrix[fold][matrix_correspond_row][matrix_correspond_column] += 1
     return cf_matrix
 
@@ -77,16 +77,19 @@ def f1(recall, precision):
     return (2 * recall * precision) / (recall + precision)
 
 
-def classificationRate(emotion, labels, pdts):
-    confusion_matrix = confusionMatrix(labels, pdts)
-    ave_cf_matrix = averageConfusionMatrix(confusion_matrix)
-    sum = 0
+def classificationRate(cf_matrix):
+    accuracy = 0
     for i in range(EMOTION_AMOUNT):
-        sum += ave_cf_matrix[i][i]
-    return sum / ((len(labels) * len(labels[0])) / CROSS_VALIDATION_FOLDS)
+        accuracy += cf_matrix[i][i]
+    total_amount = 0.0
+    for row in cf_matrix:
+        for column in row:
+            total_amount += column
+    
+    return accuracy / total_amount
 
 
-# Summary evaluation
+# summary evaluation
 
 def evaluate(labels, pdts):
     # return a tuple with such order
@@ -98,20 +101,18 @@ def evaluate(labels, pdts):
     recall_rate = []
     precision_rate = []
     f_1 = []
-    for i in range(6):
+    for i in range(EMOTION_AMOUNT):
         # recall_rate.append(recallRate(EMOTIONS[i], ave_cf_matrix))
         # precision_rate.append(precisionRate(EMOTIONS[i], ave_cf_matrix))
+        # recall_rate.append(recallRate(EMOTIONS[i], abs_cf_matrix))
+        # precision_rate.append(precisionRate(EMOTIONS[i], abs_cf_matrix))
         recall_rate.append(recallRate(EMOTIONS[i], nom_cf_matrix))
         precision_rate.append(precisionRate(EMOTIONS[i], nom_cf_matrix))
         f_1.append(f1(recall_rate[i], precision_rate[i]))
-    c_r = [classificationRate("a", labels, pdts)]
+    c_r = [classificationRate(ave_cf_matrix)]
     # return (ave_cf_matrix, recall_rate, precision_rate, f_1, c_r)
     # return (abs_cf_matrix, recall_rate, precision_rate, f_1, c_r)
     return (nom_cf_matrix, recall_rate, precision_rate, f_1, c_r)
-
-
-# Save results into files
-TITLE = ['Recall rate:', 'Precision rate:', 'F1:', 'Classification rate:']
 
 
 def saveEvaluations(file_name, evaluations):
