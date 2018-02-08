@@ -10,7 +10,7 @@ def areLabelsSame(emotion, labels):
     pos = 0
     neg = 0
     for label in labels:
-        if emotion == label:
+        if label[emotion-1] == 1:
             pos += 1
         else:
             neg += 1
@@ -27,9 +27,11 @@ def areAttributesSame(samples, attribute):
     return True
 
 def majorityValue(emotion, labels):
+    # index 0 for positive samples
+    # index 1 for negative sampels
     counts = [0, 0]
     for label in labels:
-        if label == emotion:
+        if label[emotion-1] == 1:
             counts[0] += 1
         else:
             counts[1] += 1
@@ -69,19 +71,18 @@ def selectBestAttr(samples, labels, emotion, attributes):
         p, p0, p1, n, n0, n1 = 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
         for idx, sample in enumerate(samples):
             attr_value = sample[attribute]
-            label = labels[idx]
-            p += 1 if label==emotion else 0
-            n += 1 if label!=emotion else 0
-            p0 += 1 if (label==emotion and attr_value==0) else 0
-            p1 += 1 if (label==emotion and attr_value==1) else 0
-            n0 += 1 if (label!=emotion and attr_value==0) else 0
-            n1 += 1 if (label!=emotion and attr_value==1) else 0
+            label_value = labels[idx][emotion-1]
+            p += 1 if label_value==1 else 0
+            n += 1 if label_value==0 else 0
+            p0 += 1 if (label_value==1 and attr_value==0) else 0
+            p1 += 1 if (label_value==1 and attr_value==1) else 0
+            n0 += 1 if (label_value==0 and attr_value==0) else 0
+            n1 += 1 if (label_value==0 and attr_value==1) else 0
         # print ("ig {6} p:{0} n:{1} p0:{2} p1:{3} n0:{4} n1:{5}".format(p, n, p0, p1, n0, n1, attribute))
         ig = entropy(p, n) - remainder(p, n, p0, p1, n0, n1)
         igs.append(ig)
 
     if areIGSame(igs):
-        print ("fucking")
         return -1
     else:
         max_idx = 0
@@ -99,7 +100,7 @@ def learn(dt, dataset, attributes):
     
     if areLabelsSame(emotion, labels):
         # all samples share the same emotion
-        leaf_value = YES if emotion==labels[0] else NO
+        leaf_value = YES if labels[0][emotion-1]==1 else NO
         if root_attr == -1:
             dt.newLeaf(YES, leaf_value)
             dt.newLeaf(NO, leaf_value)

@@ -10,6 +10,7 @@ class DecisionTree:
         self.__rootAttribute = attr
         self.__emotion = emotion
         self.branchs = {1: None, 0: None}
+        self.maxDepth = 0
 
 # Accessing
 
@@ -105,42 +106,47 @@ class DecisionTree:
 
 # overall predictions
 
-def testCombine(trees, dataset):
-    samples = dataset[0]
-    labels = dataset[1]
-    pdts_matrix = []
-    for dt in trees:
-        pdts_matrix.append(dt.predict(samples))
-    predictions = combineTest(pdts_matrix, labels)
-    return predictions
+# def testCombine(trees, dataset):
+#     samples = dataset[0]
+#     labels = dataset[1]
+#     pdts_matrix = []
+#     for dt in trees:
+#         pdts_matrix.append(dt.predict(samples))
 
-def combineTest(pdts_matrix, labels):
-    predictions = []
-    ties = 0
-    for idx in range(len(pdts_matrix[0])):
-        activation = []
-        for emotion in range(EMOTION_AMOUNT):
-            if pdts_matrix[emotion][idx] == 1:
-                activation.append(emotion+1)
-        ties = len(activation)
-        if ties==0 or ties>1:
-            ties += 1
-            predictions.append(labels[idx]+1 if labels[idx]!=6 else 5)
-        else:
-            predictions.append(activation[0])
+#     return combineTest(pdts_matrix, labels)
 
-    print ("Ties proportion: " + str(ties/float(len(pdts_matrix[0]))))
-    return predictions
+# def combineTest(pdts_matrix, labels):
+#     predictions = []
+#     ties_amount = 0
+#     for idx in range(len(pdts_matrix[0])):
+#         activation = []
+#         for emotion in range(EMOTION_AMOUNT):
+#             if pdts_matrix[emotion][idx] == 1:
+#                 activation.append(emotion+1)
+#         ties = len(activation)
+#         if ties==0 or ties>1:
+#             ties_amount += 1
+#             # predictions.append(labels[idx]+1 if labels[idx]!=6 else 5)
+#             label = decodeLabel(labels[idx])
+#             if activation.count(label)==1:
+#                 predictions.append(labels[idx])
+#             else:
+#                 predictions.append(encodeLabel(label+1 if label!=6 else 5))
+#         else:
+#             predictions.append(encodeLabel(activation[0]))
+
+#     print ("Ties proportion: " + str(ties_amount/float(len(pdts_matrix[0]))))
+#     return predictions
 
 def testTrees(trees, samples):
     pdts_matrix = []
     for dt in trees:
         pdts_matrix.append(dt.predict(samples))
 
-    predictions = combine(pdts_matrix)
+    predictions = combine(trees, pdts_matrix)
     return predictions
 
-def combine(pdts_matrix):
+def combine(trees, pdts_matrix):
     activations = []
     for idx in range(len(pdts_matrix[0])):
         activation = []
@@ -148,10 +154,16 @@ def combine(pdts_matrix):
             if pdts_matrix[emotion][idx] == 1:
                 activation.append(emotion+1)
         activations.append(activation)
-    return pick(activations)
+    combinations = pick(trees, activations)
+
+    predictions = []
+    for prediction in combinations:
+        predictions.append(encodeLabel(prediction))
+
+    return predictions
 
 # Random picking
-# def pick(activations):
+# def pick(trees, activations):
 #     predictions = []
 #     for activation in activations:
 #         if activation:
@@ -164,7 +176,7 @@ def combine(pdts_matrix):
 
 
 # 1st Picking Algorithm
-# def pick(activations):
+# def pick(trees, activations):
 #     predictions = []
 #     for activation in activations:
 #         if activation:
@@ -174,7 +186,7 @@ def combine(pdts_matrix):
 #     return predictions
 
 # Recall & precision based picking
-def pick(activations):
+def pick(trees, activations):
     predictions = []
     recalls = RECALLS
     precisions = PRECISIONS
@@ -188,19 +200,14 @@ def pick(activations):
             for idx in range(EMOTION_AMOUNT):
                 recall = recalls[idx]
                 emotion = idx+1 if recall<mini_recall else emotion
+                mini_recall = recalls[emotion-1]
             predictions.append(emotion)
         else:
-            max_precision = precisions[activation[0]-1]
-            emotion = activation[0]
-            for activated in activation:
-                precision = precisions[activated-1]
-                emotion = activated if precision>max_precision else emotion
-            predictions.append(emotion)
+            predictions.append(emotionMax(activation, precisions))
     return predictions
 
 # F1 measure based picking
-
-# def pick(activations):
+# def pick(trees, activations):
 #     predictions = []
 #     f1s = F1s
 #     for activation in activations:
@@ -208,18 +215,32 @@ def pick(activations):
 #         if ties == 1:
 #             predictions.append(activation[0])
 #         elif ties == 0:
-#             max_f1 = f1s[0]
-#             emotion = 0
-#             for idx in range(EMOTION_AMOUNT):
-#                 f1 = f1s[idx]
-#                 emotion = idx+1 if f1>max_f1 else emotion
-#             predictions.append(emotion)
+#             predictions.append(emotionMax(range(1, 6), f1s))
 #         else:
-#             max_f1 = f1s[activation[0]-1]
-#             emotion = activation[0]
-#             for activated in activation:
-#                 f1 = f1s[activated-1]
-#                 emotion = activated if f1>max_f1 else emotion
-#             predictions.append(emotion)
-
+#             predictions.append(emotionMax(activation, f1s))
 #     return predictions
+
+# depth first
+# def pick(trees, activations):
+#     predictions = []
+#     depths = []
+#     for tree in trees:
+#         depths.append(tree.depth())
+
+#     for activation in activations:
+#         ties = len(activation)
+#         if ties == 1:
+#             predictions.append(activation[0])
+#         elif ties > 1:
+#             predictions.append(emotionMax(activation, depths))
+#         else:
+#             predictions.append(emotionMax(range(1, 6), depths))
+#     return predictions
+
+def emotionMax(emotions, values):
+    max_emotion = emotions[0]
+    max_value = values[max_emotion-1]
+    for emotion in emotions:
+        max_emotion = emotion if values[emotion-1]>max_value else max_emotion
+        max_value = values[max_emotion-1]
+    return max_emotion

@@ -1,42 +1,50 @@
 # Data Processor works for loading and preprocessing, format and split etc.
-import scipy.io #scipy: 0.17.0
-import numpy as np #numpy: 1.11.0
-import pickle #protocol version type:3.0
-# Load data
+
+import scipy.io
+import numpy as np
+import pickle
+
+from config import encodeLabel
+from config import EMOTION_AMOUNT
+
+# Load data from .mat datafile
 def readDataFromMat(file_name):
     print("read data: " + file_name)
-    raw_data_X = scipy.io.loadmat(file_name)['x'].tolist() #transfer data from mat table to list
+    raw_data_X = scipy.io.loadmat(file_name)['x'].tolist()
     raw_data_Y = scipy.io.loadmat(file_name)['y'].tolist()
+
+    # transfer the y(label) date into one hot encoding, i.e. 1*6 list
     num_of_rows = len(raw_data_Y)
-    new_data_list_Y = np.zeros(num_of_rows, int)     #create a new 1*n list initilized with all zero
-    # read every element of the two-dimensional list, and put it in 1*n list
+    new_data_list_Y = np.zeros((num_of_rows, EMOTION_AMOUNT), int)
     for row in range(new_data_list_Y.shape[0]):
-        new_data_list_Y[row] = raw_data_Y[row][0]
+        new_data_list_Y[row] = encodeLabel(raw_data_Y[row][0])
+        
     return (raw_data_X, new_data_list_Y.tolist())
 
 # Split and divide
-def crossValidation(dataset, fold, fold_num): # fold: current test fold no, fold_num: fold value
-    fold_unit_amount = int(len(dataset[0]) / float(fold_num))
-    start = (fold) * fold_unit_amount                     #the starting row based on fold no
-    end = start + fold_unit_amount
+# return the dataset corresponding to the given param 'fold' index
+# of the total number of division 'fold_num'
+def crossValidation(dataset, fold, fold_num):
     samples = dataset[0]
     labels = dataset[1]
-    #categorize the train_list and test_list
+
+    fold_unit_amount = int(len(dataset[0]) / float(fold_num))
+    start = (fold) * fold_unit_amount
+    end = start + fold_unit_amount
+    
     train_samples = samples[0:start] + samples[end:-1]
     train_labels = labels[0:start] + labels[end:-1]
     train_list = [train_samples, train_labels]
+    
     test_list = [samples[start:end], labels[start:end]]
     return (train_list,test_list)
 
-#make the subdataset based on given attribute
+#make the subdataset based on the states of given attribute
 def subDataset(dataset, attr):
+    # store the samples for attribute with value 1
     sub_1 = [[], []]
+    # store the samples for attribute with value 0
     sub_0 = [[], []]
-    # idx:index sample:element, reading through every row,
-    #looking at specific attribute value based on the index 'attr'
-    #find the corresponding label of that attr
-    #if attribute value is 1, append to sub_1
-    #if attribute value is 0, append to sub_0
     for idx, sample in enumerate(dataset[0]):
         attr_value = sample[attr]
         label = dataset[1][idx]
