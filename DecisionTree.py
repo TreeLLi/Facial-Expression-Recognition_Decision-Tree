@@ -36,7 +36,7 @@ class DecisionTree:
     def emotion(self):
         return labelToNo(self.__emotion)
 
-    def getTreeWidth(self):
+    def width(self):
         width = 0
         for key in self.branchs.keys():
             if isinstance(self.branchs[key], DecisionTree):
@@ -45,7 +45,7 @@ class DecisionTree:
                 width += 1
         return width
 
-    def getTreeDepth(self):
+    def depth(self):
         maxDepth = 0
         for key in self.branchs.keys():
             if isinstance(self.branchs[key], DecisionTree):
