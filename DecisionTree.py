@@ -40,7 +40,7 @@ class DecisionTree:
         width = 0
         for key in self.branchs.keys():
             if isinstance(self.branchs[key], DecisionTree):
-                width += self.branchs[key].getTreeWidth()
+                width += self.branchs[key].width()
             else:
                 width += 1
         return width
@@ -111,13 +111,15 @@ class DecisionTree:
         if isinstance(self.branchs[key], DecisionTree):
             return self.branchs[key].predictSample(sample, depth+1, ig+self.__ig)
         else:
-            return (self.branchs[key], depth+1, ig+self.__ig)
+            return [self.branchs[key], depth+1, ig+self.__ig]
 
     # predict the emotions of given samples
     def predict(self, samples):
         pdt = []
         for sample in samples:
-            pdt.append(self.predictSample(sample))
+            results = self.predictSample(sample)
+            results[1] = results[1] / float(self.depth())
+            pdt.append(results)
         return pdt
 
 # overall predictions

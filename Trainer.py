@@ -141,7 +141,7 @@ def learn(dt, dataset, attributes):
 
 def learnModel(emotion, dataset):
     dt = DecisionTree(emotion)
-    attributes = list(range(0, ATTRIBUTE_AMOUNT-1))
+    attributes = list(range(ATTRIBUTE_AMOUNT))
 
     learn(dt, dataset, attributes)
     return dt

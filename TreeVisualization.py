@@ -22,7 +22,7 @@ def plotTree(tree, xlim, rootX, rootY, isLeft):
     l = [0,0]
     for key in tree.branchs.keys():
         if isinstance(tree.branchs[key], DT.DecisionTree):
-            l[key] = tree.branchs[key].getTreeWidth()
+            l[key] = tree.branchs[key].width()
         else:
             l[key] = 1
 # calculate the x coordinate of the root node of the current subtree based on the size of its branchs and the x coordinate of its parent tree's root node
@@ -40,7 +40,7 @@ def plotTree(tree, xlim, rootX, rootY, isLeft):
     for key in tree.branchs.keys():
         # if the branch is another subtree
         if isinstance(tree.branchs[key], DT.DecisionTree):
-            xlim = tree.branchs[key].getTreeWidth()
+            xlim = tree.branchs[key].width()
             if key == 1:
                 plotTree(tree.branchs[key], xlim, currX, currY, True)
             else:
@@ -60,8 +60,8 @@ def visualise(tree):
     fig = plt.figure(1, facecolor = 'white', figsize = (36,20))
     fig.clf()
     visualise.ax = plt.subplot(111)
-    plotTree.totalW = tree.getTreeWidth()
-    plotTree.totalD = tree.getTreeDepth()
+    plotTree.totalW = tree.width()
+    plotTree.totalD = tree.depth()
     visualise.ax.set_xlim(0, plotTree.totalW)
     visualise.ax.set_ylim(0, plotTree.totalD)
     visualise.ax.text(5, 0, "Left Arrow: YES; Right Arrow: NO\n Square: ATTRIBUTE; Circle: LEAF NODE",
@@ -72,5 +72,5 @@ def visualise(tree):
     plotTree(tree, plotTree.totalW, plotTree.totalW, 1.1 + plotTree.totalD, True)
     figName = labelToStr(tree.emotion())
     plt.axis('off')
-    plt.savefig(figName + '.png')
+    plt.savefig("./images/" + figName + '.png')
 #    plt.show()

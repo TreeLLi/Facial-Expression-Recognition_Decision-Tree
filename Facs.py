@@ -21,7 +21,7 @@ if __name__ == '__main__':
         dt = learnModel(emotion, clean_dataset)
         print ("Trained tree " + emotion + " with depth " + str(dt.depth()))
         clean_entire_dts.append(dt)
-        # dt.visualise()
+        dt.visualisation()
     
     for dataset in [clean_dataset, noisy_dataset]:
         dts_matrix = []
