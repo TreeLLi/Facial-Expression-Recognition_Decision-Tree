@@ -52,7 +52,8 @@ if __name__ == '__main__':
             labels_matrix.append(test_dataset[1])
 
         # evaluate the results of predictions
-        cf_matrix, recalls, precisions, f1s, classifications = evaluate(labels_matrix, pdts_matrix)
+        results = evaluate(labels_matrix, pdts_matrix)
+        cf_matrix, recalls, precisions, f1s, classifications = results
         if dataset is clean_dataset:
             print ("The evaluation for the clean dataset:\n")
         else:
@@ -73,9 +74,8 @@ if __name__ == '__main__':
         print ("Classification rates: ")
         print (classifications)
 
-        # results = evaluate(labels_matrix, pdts_matrix)
-        # if dataset is clean_dataset:
-        #     file_name = "clean_evaluations"
-        # else:
-        #     file_name = "noisy_evaluations"
-        # saveEvaluations(file_name, results)
+        if dataset is clean_dataset:
+            file_name = "clean_evaluations"
+        else:
+            file_name = "noisy_evaluations"
+        saveEvaluations(file_name, results)

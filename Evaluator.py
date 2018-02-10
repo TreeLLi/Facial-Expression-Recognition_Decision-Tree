@@ -102,23 +102,23 @@ def evaluate(labels, pdts):
     precision_rate = []
     f_1 = []
     for i in range(EMOTION_AMOUNT):
-        # recall_rate.append(recallRate(EMOTIONS[i], ave_cf_matrix))
-        # precision_rate.append(precisionRate(EMOTIONS[i], ave_cf_matrix))
+        recall_rate.append(recallRate(EMOTIONS[i], ave_cf_matrix))
+        precision_rate.append(precisionRate(EMOTIONS[i], ave_cf_matrix))
         # recall_rate.append(recallRate(EMOTIONS[i], abs_cf_matrix))
         # precision_rate.append(precisionRate(EMOTIONS[i], abs_cf_matrix))
-        recall_rate.append(recallRate(EMOTIONS[i], nom_cf_matrix))
-        precision_rate.append(precisionRate(EMOTIONS[i], nom_cf_matrix))
+        # recall_rate.append(recallRate(EMOTIONS[i], nom_cf_matrix))
+        # precision_rate.append(precisionRate(EMOTIONS[i], nom_cf_matrix))
         f_1.append(f1(recall_rate[i], precision_rate[i]))
     c_r = [classificationRate(ave_cf_matrix)]
-    # return (ave_cf_matrix, recall_rate, precision_rate, f_1, c_r)
+    return (ave_cf_matrix, recall_rate, precision_rate, f_1, c_r)
     # return (abs_cf_matrix, recall_rate, precision_rate, f_1, c_r)
-    return (nom_cf_matrix, recall_rate, precision_rate, f_1, c_r)
+    # return (nom_cf_matrix, recall_rate, precision_rate, f_1, c_r)
 
 
 def saveEvaluations(file_name, evaluations):
     # able to detect the data structures of passed evaluations
     # the write them into a single file with given file name automatically
-    file = open(file_name, 'w')
+    file = open("./evaluations/"+file_name, 'w')
     file.write('Confusion Matrix:\n')
     for argument_index in range(len(evaluations)):
         for index in range(len(evaluations[argument_index])):
