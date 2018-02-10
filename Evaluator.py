@@ -102,17 +102,17 @@ def evaluate(labels, pdts):
     precision_rate = []
     f_1 = []
     for i in range(EMOTION_AMOUNT):
-        recall_rate.append(recallRate(EMOTIONS[i], ave_cf_matrix))
-        precision_rate.append(precisionRate(EMOTIONS[i], ave_cf_matrix))
+        # recall_rate.append(recallRate(EMOTIONS[i], ave_cf_matrix))
+        # precision_rate.append(precisionRate(EMOTIONS[i], ave_cf_matrix))
         # recall_rate.append(recallRate(EMOTIONS[i], abs_cf_matrix))
         # precision_rate.append(precisionRate(EMOTIONS[i], abs_cf_matrix))
-        # recall_rate.append(recallRate(EMOTIONS[i], nom_cf_matrix))
-        # precision_rate.append(precisionRate(EMOTIONS[i], nom_cf_matrix))
+        recall_rate.append(recallRate(EMOTIONS[i], nom_cf_matrix))
+        precision_rate.append(precisionRate(EMOTIONS[i], nom_cf_matrix))
         f_1.append(f1(recall_rate[i], precision_rate[i]))
-    c_r = [classificationRate(ave_cf_matrix)]
-    return (ave_cf_matrix, recall_rate, precision_rate, f_1, c_r)
+    c_r = [classificationRate(nom_cf_matrix)]
+    # return (ave_cf_matrix, recall_rate, precision_rate, f_1, c_r)
     # return (abs_cf_matrix, recall_rate, precision_rate, f_1, c_r)
-    # return (nom_cf_matrix, recall_rate, precision_rate, f_1, c_r)
+    return (nom_cf_matrix, recall_rate, precision_rate, f_1, c_r)
 
 
 def saveEvaluations(file_name, evaluations):
