@@ -290,7 +290,7 @@ def combine(trees, pdts_matrix, labels):
     ties_0_right = 0
     ties_2_right = 0
     for idx, prediction in enumerate(combinations):
-        predictions.append(encodeLabel(prediction))
+        predictions.append(prediction)
         ties = len(activations[idx])
         label = decodeLabel(labels[idx])
         ties_0_amount += 1 if ties==0 else 0

@@ -9,7 +9,7 @@ def confusionMatrix(labels, predictions):
         len_fold_labels = len(labels[fold])
         for exp_num in range(len_fold_labels):
             matrix_correspond_row = decodeLabel(labels[fold][exp_num]) - 1
-            matrix_correspond_column = decodeLabel(predictions[fold][exp_num]) - 1
+            matrix_correspond_column = predictions[fold][exp_num] - 1
             cf_matrix[fold][matrix_correspond_row][matrix_correspond_column] += 1
     return cf_matrix
 
