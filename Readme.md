@@ -1,7 +1,21 @@
 # Facial Expression Recognition System(Simplified) Based on the AUs
 
 ## Running Instructions
-In order to test the performance of the trained decision trees on new dataset, please load the trained trees from `decision_tree.pkl`, which returns a list of `6` trained trees, and import `DecisionTree.py` in your test file. You can use standard way of loading pickle file to load the `decision_tree.pkl` or simply use the `retrieveObjects` function in `DataProcessor.py`. The running environment should be `Linux` and `python 3`. Invoke the function `testTrees(trees, samples)` to start your testing. The first parameter of the `testTrees` function is the loaded `6` decision trees, and the second parameter is the new samples. This function returns a list of predictions ranging from `1` to `6`. Although it is rare that the program starts running slowly, if it happens, please wait a moment. We have provided an example test file `bootstrap.py` as a reference to test the trained decision trees.
+In order to test the performance of the trained decision trees on new dataset, please load the trained trees from `decision_tree.pkl`, which returns a list of `6` trained trees, and import `DecisionTree.py` in your test file. You can use standard way of loading pickle file to load the `decision_tree.pkl` or simply use the `retrieveObjects` function in `DataProcessor.py`. The running environment should be `Linux` and `python 3`. Invoke the function `testTrees(trees, samples)` to start your testing. The first parameter of the `testTrees` function is the loaded `6` decision trees, and the second parameter is the new samples. This function returns a list of predictions ranging from `1` to `6`. We have provided an example test file `bootstrap.py` as a reference to test the trained decision trees.
+
+
+
+## Dependencies
+
+Kindly please **add any external libraries you're using but not in this list** into here so that others can know what he/she should prepare:
+
+* scipy.io (version:0.17.0)
+* numpy (version:1.11.0)
+* pickle (version:3.0)
+* matplotlib (version:1.5.1)
+
+## Retrain the decision trees
+If you want to retrain the decision trees, please run the `Facs.py`. **Although it is rare that the program starts running slowly, if it happens, please wait a moment**. It may take a moment to cache some fonts. 
 
 ## File Architecture
 ### Facs.py
@@ -23,15 +37,3 @@ These files, currently `*.pyc` and `__pycache__`, have already been blocked to b
 * **label(s)**: the single value(list) of emotion's number(s)
 * **matrix**: alias of multi-dimension list
 * **row**: single(one) dimension list embeded in the matrix
-
-## Dependencies
-
-Kindly please **add any external libraries you're using but not in this list** into here so that others can know what he/she should prepare:
-
-* import scipy.io (version:0.17.0)
-* import numpy as np (version:1.11.0)
-* import pickle (version:3.0)
-* import time (version:3.5.2)
-* import matplotlib (version:1.5.1)
-* import random
-* import math
