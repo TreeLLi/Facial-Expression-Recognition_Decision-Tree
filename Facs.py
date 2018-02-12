@@ -10,8 +10,8 @@ from config import *
 if __name__ == '__main__':
     print ('Main program:\n')
 
-    clean_dataset = readDataFromMat(CLEAN_DATASET)
-    noisy_dataset = readDataFromMat(NOISY_DATASET)
+    clean_dataset = readDataFromMat("./data/" + CLEAN_DATASET)
+    noisy_dataset = readDataFromMat("./data/" + NOISY_DATASET)
 
     # train models on the entire clean datasetsets
     clean_entire_dts = []

@@ -10,8 +10,8 @@ from config import EMOTION_AMOUNT
 # Load data from .mat datafile
 def readDataFromMat(file_name):
     print("read data: " + file_name)
-    raw_data_X = scipy.io.loadmat("./data/"+file_name)['x'].tolist()
-    raw_data_Y = scipy.io.loadmat("./data/"+file_name)['y'].tolist()
+    raw_data_X = scipy.io.loadmat(file_name)['x'].tolist()
+    raw_data_Y = scipy.io.loadmat(file_name)['y'].tolist()
 
     # transfer the y(label) date into one hot encoding, i.e. 1*6 list
     num_of_rows = len(raw_data_Y)
