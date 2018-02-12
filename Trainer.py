@@ -115,6 +115,7 @@ def learn(dt, dataset, attributes):
         best_attr_ig = selectBestAttr(samples, labels, emotion, attributes)
         best_attr = best_attr_ig[0]
         if best_attr == -1:
+            # end the growth of tree if the remaining attributes are confused with the same IG
             dt.newLeaf(branch, leaf_value)
             return 
         branched_dt = dt

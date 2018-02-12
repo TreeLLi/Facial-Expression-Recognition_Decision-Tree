@@ -22,6 +22,7 @@ if __name__ == '__main__':
         print ("Trained tree " + emotion + " with depth " + str(dt.depth()))
         clean_entire_dts.append(dt)
         dt.visualisation()
+    saveObjects(clean_entire_dts)
     
     for dataset in [clean_dataset, noisy_dataset]:
         dts_matrix = []
@@ -43,17 +44,19 @@ if __name__ == '__main__':
                 dts_row.append(dt)
             dts_matrix.append(dts_row)
 
-            # Test
-            # train_dataset, test_dataset = crossValidation(noisy_dataset, fold, CROSS_VALIDATION_FOLDS)
-            
             # predict the emotions for samples of test dataset
-            pdts_matrix.append(testTrees(dts_row, test_dataset))
-            # pdts_matrix.append(testCombine(dts_row, test_dataset))
+            pdts_matrix.append(testTrees(dts_row, test_dataset[0]))
             labels_matrix.append(test_dataset[1])
 
         # evaluate the results of predictions
         results = evaluate(labels_matrix, pdts_matrix)
         cf_matrix, recalls, precisions, f1s, classifications = results
+        if dataset is clean_dataset:
+            file_name = "clean_evaluations"
+        else:
+            file_name = "noisy_evaluations"
+        saveEvaluations(file_name, results)
+        
         if dataset is clean_dataset:
             print ("The evaluation for the clean dataset:\n")
         else:
@@ -74,8 +77,4 @@ if __name__ == '__main__':
         print ("Classification rates: ")
         print (classifications)
 
-        if dataset is clean_dataset:
-            file_name = "clean_evaluations"
-        else:
-            file_name = "noisy_evaluations"
-        saveEvaluations(file_name, results)
+        
