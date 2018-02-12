@@ -1,7 +1,7 @@
 # Facial Expression Recognition System(Simplified) Based on the AUs
 
 ## Running Instructions
-In order to test the performance of the trained decision trees on new dataset, please load the trained trees from `decision_tree.pkl`, which returns a list of `6` trained trees, and import `DecisionTree.py` in your test file. The running environment should be `Linux` and `python 3`. Invoke the function `testTrees(trees, dataset)` to start your testing. The first parameter of the `testTrees` function is the loaded `6` decision trees, and the second parameter is the new dataset with the same format as the `cleandata_students.mat` and `noisydata_students`. This function returns a list of predictions ranging from `1` to `6`. 
+In order to test the performance of the trained decision trees on new dataset, please load the trained trees from `decision_tree.pkl`, which returns a list of `6` trained trees, and import `DecisionTree.py` in your test file. You can use standard way of loading pickle file to load the `decision_tree.pkl` or simply use the `retrieveObjects` function in `DataProcessor.py`. The running environment should be `Linux` and `python 3`. Invoke the function `testTrees(trees, dataset)` to start your testing. The first parameter of the `testTrees` function is the loaded `6` decision trees, and the second parameter is the new samples. This function returns a list of predictions ranging from `1` to `6`. Although it is rare that the program starts running slowly, if it happens, please wait a moment. We have provided an example test file `bootstrap.py` as a reference to test the trained decision trees.
 
 ## File Architecture
 ### Facs.py
@@ -32,3 +32,6 @@ Kindly please **add any external libraries you're using but not in this list** i
 * import numpy as np (version:1.11.0)
 * import pickle (version:3.0)
 * import time (version:3.5.2)
+* import matplotlib (version:1.5.1)
+* import random
+* import math
