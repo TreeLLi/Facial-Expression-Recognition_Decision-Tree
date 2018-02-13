@@ -1,7 +1,7 @@
 # Facial Expression Recognition System(Simplified) Based on the AUs
 
 ## Running Instructions
-In order to test the performance of the trained decision trees on new dataset, please load the trained trees from `decision_tree.pkl`, which returns a list of `6` trained trees, and import `DecisionTree.py` in your test file. You can use standard way of loading pickle file to load the `decision_tree.pkl` or simply use the `retrieveObjects` function in `DataProcessor.py`. The running environment should be `Linux` and `python 3`. Invoke the function `testTrees(trees, samples)` to start your testing. The first parameter of the `testTrees` function is the loaded `6` decision trees, and the second parameter is the new samples. This function returns a list of predictions ranging from `1` to `6`. We have provided an example test file `bootstrap.py` as a reference to test the trained decision trees.
+In order to test the performance of the trained decision trees on new dataset, please load the trained trees from `decision_tree.pkl`, which returns a list of **6** trained trees, and import `DecisionTree.py` in your test file. You can use standard way of loading pickle file to load the `decision_tree.pkl` or simply use the `retrieveObjects` function in `DataProcessor.py`. The running environment should be **Linux** and **python 3**. Invoke the function `testTrees(trees, samples)` to start your testing. The first parameter of the `testTrees` function is the loaded **6** decision trees, and the second parameter is the new samples. This function returns a list of predictions ranging from **1** to **6**. We have provided an example test file `bootstrap.py` as a reference to test the trained decision trees.
 
 
 
